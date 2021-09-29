@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.ProfileFragment">
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ProfileFragment"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -43,6 +44,25 @@
             android:includeFontPadding="false"
             android:text="Admin"
             android:textSize="14sp" />
+        <ProgressBar
+            android:id="@+id/experienceBar"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:indeterminateOnly="false"
+            android:progressDrawable="@drawable/experience_bar"
+            android:layout_toRightOf="@+id/userName"
+            android:layout_centerInParent="true"
+            tools:progress="60"/>
+
+        <TextView
+            android:id="@+id/level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:layout_toRightOf="@+id/userName"
+            android:layout_marginLeft="65dp"
+            android:layout_centerInParent="true"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -240,7 +260,7 @@
                     android:layout_below="@+id/settings_num"
                     android:layout_centerHorizontal="true"
                     android:includeFontPadding="false"
-                    android:text="Settings"
+                    android:text="Account Settings"
                     android:textAlignment="center"
                     android:textSize="16sp" />
 
@@ -251,3 +271,4 @@
     </LinearLayout>
 
 </LinearLayout>
+</layout>

@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import project.group3tztechcorp.chefitupapp.R
+import project.group3tztechcorp.chefitupapp.databinding.FragmentAccountInformationBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,8 +36,15 @@ class AccountInformationFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_account_information, container, false)
+        val binding = DataBindingUtil.inflate<FragmentAccountInformationBinding>(
+            inflater, R.layout.fragment_account_information, container, false)
+
+
+        return binding.root
+        //return inflater.inflate(R.layout.fragment_account_information, container, false)
     }
 
     companion object {

@@ -210,7 +210,7 @@ class Registration : AppCompatActivity() {
         reference3.child(username).setValue(information)
 
         //send to next activity
-        val intent = Intent(this@Registration, UserProfile::class.java)
+        val intent = Intent(this@Registration, UserInterface::class.java)
         intent.putExtra("fullName", fullName)
         intent.putExtra("username", username)
         intent.putExtra("email", email)

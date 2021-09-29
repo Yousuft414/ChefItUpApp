@@ -10,6 +10,7 @@ import android.widget.*
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.*
+import project.group3tztechcorp.chefitupapp.ui.ProfileFragment
 
 class Login : AppCompatActivity() {
     lateinit var mUsername: TextInputLayout;
@@ -106,7 +107,7 @@ class Login : AppCompatActivity() {
                                         var phoneFromDB = snapshot2.child(userEnteredUsername).child("phone").getValue()
                                         var emailFromDB = snapshot2.child(userEnteredUsername).child("email").getValue()
 
-                                        val intent = Intent(this@Login, UserProfile::class.java)
+                                        val intent = Intent(this@Login, UserInterface::class.java)
                                         intent.putExtra("fullName", nameFromDB.toString())
                                         intent.putExtra("username", usernameFromDB.toString())
                                         intent.putExtra("email", emailFromDB.toString())
