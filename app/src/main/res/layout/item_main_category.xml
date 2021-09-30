@@ -30,7 +30,7 @@
                 android:src="@drawable/chef_icon"/>
 
             <TextView
-                android:id="@+id/tv_dish_name"
+                android:id="@+id/categoryName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Dish Name"

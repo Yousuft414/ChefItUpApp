@@ -5,7 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.FirebaseError
+import com.google.firebase.database.*
 import project.group3tztechcorp.chefitupapp.R
+import project.group3tztechcorp.chefitupapp.Recipe
+import project.group3tztechcorp.chefitupapp.adapter.SubCategoryAdapter
+import project.group3tztechcorp.chefitupapp.databinding.FragmentProfileBinding
+import project.group3tztechcorp.chefitupapp.databinding.FragmentRecipeHomeBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,12 +31,20 @@ class RecipeHomeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var reference: DatabaseReference
+    private lateinit var categoryRecyclerView: RecyclerView
+    private lateinit var recipeRecyclerView: RecyclerView
+    private lateinit var recipeArrayList: ArrayList<Recipe>
+    private lateinit var categoryArrayList: ArrayList<String>
+    lateinit var binding: FragmentRecipeHomeBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
     }
 
     override fun onCreateView(
@@ -35,7 +52,21 @@ class RecipeHomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_recipe_home, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_recipe_home, container, false)
+
+        recipeRecyclerView = binding.rvSubCategory
+        recipeRecyclerView.layoutManager = LinearLayoutManager(binding.root.context)
+        recipeRecyclerView.setHasFixedSize(true)
+
+        categoryRecyclerView = binding.rvMainCategory
+        categoryRecyclerView.layoutManager = LinearLayoutManager(binding.root.context)
+        categoryRecyclerView.setHasFixedSize(true)
+
+        recipeArrayList = arrayListOf<Recipe>()
+        getAllRecipies()
+
+        return binding.root
+        //return inflater.inflate(R.layout.fragment_recipe_home, container, false)
     }
 
     companion object {
@@ -56,5 +87,26 @@ class RecipeHomeFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    fun getAllRecipies(){
+        reference = FirebaseDatabase.getInstance().getReference("Recipe")
+
+        reference.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    for (recipeSnapshot in snapshot.children){
+                        val recipe = recipeSnapshot.getValue(Recipe::class.java)
+                        recipeArrayList.add(recipe!!)
+                    }
+                    recipeRecyclerView.adapter = SubCategoryAdapter(recipeArrayList)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 }

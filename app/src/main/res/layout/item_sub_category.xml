@@ -18,7 +18,8 @@
             android:id="@+id/img_dish"
             android:layout_width="match_parent"
             android:scaleType="centerCrop"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:src="@drawable/loginbackground"/>
 
 
 
@@ -31,7 +32,7 @@
 
 
         <TextView
-            android:id="@+id/tv_dish_name"
+            android:id="@+id/recipeName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Dish Name"
