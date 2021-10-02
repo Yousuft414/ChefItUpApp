@@ -6,17 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.findFragment
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
-import com.google.android.material.card.MaterialCardView
 import com.google.firebase.database.*
+import project.group3tztechcorp.chefitupapp.Achievements
+import project.group3tztechcorp.chefitupapp.GroceryList
 import project.group3tztechcorp.chefitupapp.R
-import project.group3tztechcorp.chefitupapp.UserInterface
+import project.group3tztechcorp.chefitupapp.RecipesCompleted
 import project.group3tztechcorp.chefitupapp.databinding.FragmentProfileBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -53,8 +50,22 @@ class ProfileFragment : Fragment() {
         getData()
 
         binding.accountBtn.setOnClickListener { view: View ->
-            view.findNavController().navigate(R.id.action_profileFragment_to_accountInformationFragment)
+            //view.findNavController().navigate(R.id.action_profileFragment_to_accountInformationFragment)
+            startActivity(Intent(context, GroceryList::class.java))
         }
+        /*
+        binding.rewardsGainedBtn.setOnClickListener{
+            //inflater.inflate(R.layout.fragment_rewards_page, container, false)
+        }*/
+
+        binding.recipesCompletedBtn.setOnClickListener {
+            startActivity(Intent(context, RecipesCompleted::class.java))
+        }
+
+        binding.achievementsBtn.setOnClickListener {
+            startActivity(Intent(context, Achievements::class.java))
+        }
+
 
 
         return binding.root

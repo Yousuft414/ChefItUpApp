@@ -12,6 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChefItUpApp">
         <activity
+            android:name=".RecipesCompleted"
+            android:exported="true" />
+        <activity
+            android:name=".GroceryList"
+            android:exported="true" />
+        <activity
+            android:name=".SingleRecipePage"
+            android:exported="true" />
+        <activity
+            android:name=".Achievements"
+            android:exported="true" />
+        <activity
             android:name=".UserInterface"
             android:exported="true" />
         <activity

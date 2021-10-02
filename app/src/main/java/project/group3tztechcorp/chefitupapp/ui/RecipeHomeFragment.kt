@@ -12,8 +12,8 @@ import com.google.firebase.FirebaseError
 import com.google.firebase.database.*
 import project.group3tztechcorp.chefitupapp.R
 import project.group3tztechcorp.chefitupapp.Recipe
+import project.group3tztechcorp.chefitupapp.adapter.MainCategoryAdapter
 import project.group3tztechcorp.chefitupapp.adapter.SubCategoryAdapter
-import project.group3tztechcorp.chefitupapp.databinding.FragmentProfileBinding
 import project.group3tztechcorp.chefitupapp.databinding.FragmentRecipeHomeBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -55,14 +55,17 @@ class RecipeHomeFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_recipe_home, container, false)
 
         recipeRecyclerView = binding.rvSubCategory
-        recipeRecyclerView.layoutManager = LinearLayoutManager(binding.root.context)
+        recipeRecyclerView.layoutManager = LinearLayoutManager(container?.context, LinearLayoutManager.HORIZONTAL, false)
         recipeRecyclerView.setHasFixedSize(true)
 
         categoryRecyclerView = binding.rvMainCategory
-        categoryRecyclerView.layoutManager = LinearLayoutManager(binding.root.context)
+        categoryRecyclerView.layoutManager = LinearLayoutManager(container?.context, LinearLayoutManager.HORIZONTAL, false)
         categoryRecyclerView.setHasFixedSize(true)
 
         recipeArrayList = arrayListOf<Recipe>()
+        categoryArrayList = arrayListOf<String>()
+
+        getCategories()
         getAllRecipies()
 
         return binding.root
@@ -90,7 +93,7 @@ class RecipeHomeFragment : Fragment() {
     }
 
     fun getAllRecipies(){
-        reference = FirebaseDatabase.getInstance().getReference("Recipe")
+        reference = FirebaseDatabase.getInstance().getReference("recipes")
 
         reference.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -108,5 +111,13 @@ class RecipeHomeFragment : Fragment() {
             }
 
         })
+    }
+
+    fun getCategories(){
+        categoryArrayList.add("Dessert")
+        categoryArrayList.add("Breakfast")
+        categoryArrayList.add("Lunch")
+        categoryArrayList.add("Dinner")
+        categoryRecyclerView.adapter = MainCategoryAdapter(categoryArrayList)
     }
 }

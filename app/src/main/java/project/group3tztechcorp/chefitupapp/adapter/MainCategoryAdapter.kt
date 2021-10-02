@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import project.group3tztechcorp.chefitupapp.R
-import project.group3tztechcorp.chefitupapp.Recipe
 
 class MainCategoryAdapter(private val categoryList : ArrayList<String>): RecyclerView.Adapter<MainCategoryAdapter.CategoryViewHolder>() {
 

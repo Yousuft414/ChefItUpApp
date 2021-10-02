@@ -239,7 +239,7 @@
                     android:id="@+id/settingsImage"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/settings"
+                    android:src="@drawable/shoppinglist"
                     android:layout_centerHorizontal="true"/>
                 <TextView
                     android:id="@+id/settings_num"
@@ -260,7 +260,7 @@
                     android:layout_below="@+id/settings_num"
                     android:layout_centerHorizontal="true"
                     android:includeFontPadding="false"
-                    android:text="Account Settings"
+                    android:text="Grocery List"
                     android:textAlignment="center"
                     android:textSize="16sp" />
 
