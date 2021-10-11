@@ -10,10 +10,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import com.google.firebase.database.*
-import project.group3tztechcorp.chefitupapp.Achievements
-import project.group3tztechcorp.chefitupapp.GroceryList
+import project.group3tztechcorp.chefitupapp.*
 import project.group3tztechcorp.chefitupapp.R
-import project.group3tztechcorp.chefitupapp.RecipesCompleted
 import project.group3tztechcorp.chefitupapp.databinding.FragmentProfileBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -31,6 +29,7 @@ class ProfileFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     lateinit var binding: FragmentProfileBinding
+    lateinit var user: UserInformation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -111,6 +110,8 @@ class ProfileFragment : Fragment() {
                     var rewardsNumFromDB = snapshot.child(username).child("rewards").getValue()
                     var recipiesNumFromDB = snapshot.child(username).child("recipesCompleted").getValue()
                     var achivementsNumFromDB = snapshot.child(username).child("achievementsCompleted").getValue()
+
+                    user = UserInformation(username, fullname, levelFromDB.toString().toInt(), experienceFromDB.toString().toInt(), rewardsNumFromDB.toString().toInt(), recipiesNumFromDB.toString().toInt(), achivementsNumFromDB.toString().toInt())
 
                     //set the data
                     binding.userName.text = username

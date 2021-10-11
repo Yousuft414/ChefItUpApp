@@ -1,25 +1,33 @@
 package project.group3tztechcorp.chefitupapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.MenuItem
+import android.widget.*
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import project.group3tztechcorp.chefitupapp.databinding.ActivitySingleRecipePageBinding
+import project.group3tztechcorp.chefitupapp.recipeUI.RecipeIngredients
 
 class SingleRecipePage : AppCompatActivity() {
 
     lateinit var name: String
     private lateinit var binding: ActivitySingleRecipePageBinding
     private lateinit var reference: DatabaseReference
+    private var ingredientList: ArrayList<String> = ArrayList()
+    private var directionsList: ArrayList<String> = ArrayList()
+    lateinit var menu: MenuItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_single_recipe_page)
 
         binding =DataBindingUtil.setContentView(this, R.layout.activity_single_recipe_page)
+
+        var ingredientListAdapter = ArrayAdapter<String>(this, R.layout.list_view, ingredientList)
+        var directionListAdapter = ArrayAdapter<String>(this, R.layout.list_view, directionsList)
 
         var intent = getIntent()
         name = intent.getStringExtra("Name").toString().trim()
@@ -38,15 +46,24 @@ class SingleRecipePage : AppCompatActivity() {
                     var cookTimeFromDB = snapshot.child(name).child("Cook_Time").getValue()
                     var prepTimeFromDB = snapshot.child(name).child("Prep_Time").getValue()
                     var servingsFromDB = snapshot.child(name).child("Servings").getValue()
-
+                    snapshot.child(name).child("Ingredients").children.forEach {
+                        ingredientList.add(it.getValue().toString())
+                    }
+                    var count = 0
+                    snapshot.child(name).child("Directions").children.forEach{
+                        count = count + 1
+                        directionsList.add("Step " + count.toString() + ": " + it.getValue().toString())
+                    }
                     binding.singleRecipeName.text = nameFromDB.toString()
                     binding.singleRecipeCategory.text = categoryFromDB.toString()
                     binding.singleRecipeLevel.text = levelFromDB.toString()
                     binding.singleRecipeDescription.text = descriptionFromDB.toString()
-                    binding.singleRecipeCookTime.text = cookTimeFromDB.toString() + " mins"
-                    binding.singleRecipePrepTime.text = prepTimeFromDB.toString() + " mins"
+                    binding.singleRecipeCookTime.text = "Cook: " + cookTimeFromDB.toString() + " mins"
+                    binding.singleRecipePrepTime.text = "Prep: " + prepTimeFromDB.toString() + " mins"
                     binding.singleRecipeServing.text = servingsFromDB.toString() + " people"
                     Picasso.with(this@SingleRecipePage).load(imageURLFromDB.toString()).into(binding.singleRecipeImage)
+                    binding.singleRecipeIngredientList.adapter = ingredientListAdapter
+                    binding.singleRecipeDirectionList.adapter = directionListAdapter
                 }
             }
 
@@ -55,5 +72,16 @@ class SingleRecipePage : AppCompatActivity() {
             }
 
         })
+
+        binding.backButton.setOnClickListener {
+            var intent: Intent = Intent(this@SingleRecipePage, UserInterface::class.java)
+            startActivity(intent)
+        }
+
+        binding.startButton.setOnClickListener {
+            var intent: Intent = Intent(this@SingleRecipePage, RecipeIngredients::class.java)
+            intent.putExtra("recipe", name)
+            startActivity(intent)
+        }
     }
 }

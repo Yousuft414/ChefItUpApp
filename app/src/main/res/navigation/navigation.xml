@@ -2,37 +2,4 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/navigation"
-    app:startDestination="@id/profileFragment">
-
-    <fragment
-        android:id="@+id/profileFragment"
-        android:name="project.group3tztechcorp.chefitupapp.ui.ProfileFragment"
-        android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" >
-        <action
-            android:id="@+id/action_profileFragment_to_accountInformationFragment"
-            app:destination="@id/accountInformationFragment" />
-        <action
-            android:id="@+id/action_profileFragment_to_achievementsFragment"
-            app:destination="@id/achievementsFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/accountInformationFragment"
-        android:name="project.group3tztechcorp.chefitupapp.ui.AccountInformationFragment"
-        android:label="fragment_account_information"
-        tools:layout="@layout/fragment_account_information" >
-        <action
-            android:id="@+id/action_accountInformationFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/achievementsFragment"
-        android:name="project.group3tztechcorp.chefitupapp.ui.AchievementsFragment"
-        android:label="fragment_achievements"
-        tools:layout="@layout/fragment_achievements" >
-        <action
-            android:id="@+id/action_achievementsFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-    </fragment>
-</navigation>
+    android:id="@+id/navigation" />

@@ -72,4 +72,22 @@ public class UserInformation {
     public void setAchievementsCompleted(int achievementsCompleted) {
         this.achievementsCompleted = achievementsCompleted;
     }
+
+    public void checkLevel(){
+        if (this.experience <= 300){
+            this.level = 1;
+        } else if (this.experience > 300 && this.experience <= 700){
+            this.level = 2;
+        } else if (this.experience > 700 && this.experience <= 1300){
+            this.level = 3;
+        } else if (this.experience > 1300 && this.experience <= 2100){
+            this.level = 4;
+        } else if (this.experience > 2100){
+            this.level = 5;
+        }
+    }
+
+    public void increaseExp(int exp){
+        this.experience = this.experience + exp;
+    }
 }
