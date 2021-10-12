@@ -16,8 +16,8 @@
             android:id="@+id/ingredientCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"/>
+            android:layout_alignParentLeft="true"
+            android:focusable="false"/>
 
         <TextView
             android:id="@+id/ingredientName"
@@ -26,7 +26,9 @@
             android:text="Ingredient"
             android:padding="5dp"
             android:textColor="@color/black"
-            android:layout_centerVertical="true"/>
+            android:layout_alignBaseline="@+id/ingredientCheckbox"
+            android:layout_alignBottom="@+id/ingredientCheckbox"
+            android:layout_toRightOf="@+id/ingredientCheckbox"/>
 
     </RelativeLayout>
 

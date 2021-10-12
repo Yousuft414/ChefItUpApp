@@ -6,6 +6,7 @@ import android.graphics.BlendModeColorFilter
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.AdapterView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,12 +21,11 @@ import project.group3tztechcorp.chefitupapp.databinding.ActivitySingleRecipePage
 class RecipeIngredients : AppCompatActivity() {
 
     private lateinit var reference: DatabaseReference
-    private lateinit var ingredientRecyclerView: RecyclerView
-    private lateinit var ingredientArrayList: ArrayList<Ingredient>
+    private var ingredientArrayList: ArrayList<Ingredient> = ArrayList<Ingredient>()
     private lateinit var binding: ActivityRecipeIngredientsBinding
+    private lateinit var adapter: IngredientAdapter
     lateinit var name: String
-    var selected: Boolean = false
-    var count: Int = 0
+    private var checked: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,13 +34,14 @@ class RecipeIngredients : AppCompatActivity() {
         name = intent.getStringExtra("recipe").toString().trim()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_recipe_ingredients)
 
-        ingredientRecyclerView = binding.ingredientsRecycler
-        ingredientRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        ingredientRecyclerView.setHasFixedSize(true)
-
-        ingredientArrayList = arrayListOf<Ingredient>()
 
         getAllIngredients()
+
+        binding.recipeIngredientList.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            val ingredients: Ingredient = ingredientArrayList!![position] as Ingredient
+            ingredients.selected = !ingredients.selected
+            adapter.notifyDataSetChanged()
+        }
 
         binding.nextButton.setOnClickListener {
             var intent: Intent = Intent(this@RecipeIngredients, RecipeDirections::class.java)
@@ -58,9 +59,10 @@ class RecipeIngredients : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
                     snapshot.child(recipe).child("Ingredients").children.forEach {
-                        ingredientArrayList.add(Ingredient(it.getValue().toString(), false))
+                        ingredientArrayList!!.add(Ingredient(it.getValue().toString(), false))
                     }
-                    ingredientRecyclerView.adapter = IngredientAdapter(ingredientArrayList)
+                    adapter = IngredientAdapter(ingredientArrayList!!, applicationContext)
+                    binding.recipeIngredientList.adapter = adapter
                 }
             }
 
