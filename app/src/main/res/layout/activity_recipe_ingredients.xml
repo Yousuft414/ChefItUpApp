@@ -25,6 +25,15 @@
             android:layout_below="@+id/headerTextView"
             android:layout_marginTop="30dp"/>
 
+        <Button
+            android:id="@+id/nextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            android:layout_alignRight="@+id/headerTextView"
+            android:layout_alignParentRight="true"
+            android:backgroundTint="@color/gray"/>
+
     </RelativeLayout>
 
 </layout>
