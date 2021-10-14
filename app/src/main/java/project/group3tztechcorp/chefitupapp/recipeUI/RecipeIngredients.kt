@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
+import project.group3tztechcorp.chefitupapp.Direction
 import project.group3tztechcorp.chefitupapp.Ingredient
 import project.group3tztechcorp.chefitupapp.R
 import project.group3tztechcorp.chefitupapp.adapter.IngredientAdapter
@@ -41,12 +42,26 @@ class RecipeIngredients : AppCompatActivity() {
             val ingredients: Ingredient = ingredientArrayList!![position] as Ingredient
             ingredients.selected = !ingredients.selected
             adapter.notifyDataSetChanged()
+
+            for(i in 0 until adapter.count) {
+                var ingredient: Ingredient = adapter.getItem(i)
+                if (!ingredient.selected) {
+                    checked = false
+                    break
+                } else {
+                    checked = true
+                }
+            }
         }
 
         binding.nextButton.setOnClickListener {
-            var intent: Intent = Intent(this@RecipeIngredients, RecipeDirections::class.java)
-            intent.putExtra("recipe", name)
-            startActivity(intent)
+            if(checked) {
+                var intent: Intent = Intent(this@RecipeIngredients, RecipeDirections::class.java)
+                intent.putExtra("recipe", name)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this,"You have not checked off all the ingredients", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

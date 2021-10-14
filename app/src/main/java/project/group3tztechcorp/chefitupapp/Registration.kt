@@ -1,6 +1,8 @@
 package project.group3tztechcorp.chefitupapp
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -32,6 +34,9 @@ class Registration : AppCompatActivity() {
     lateinit var reference3: DatabaseReference;
     lateinit var mLoginBtn: TextView;
     lateinit var progressBar: ProgressBar;
+    lateinit var sharedPreferences: SharedPreferences
+
+    private final val myPreferences: String = "MyPref"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +61,8 @@ class Registration : AppCompatActivity() {
         mLoginBtn = findViewById<TextView>(R.id.loginButton)
 
         progressBar = findViewById<ProgressBar>(R.id.progressBar)
+
+        sharedPreferences = getSharedPreferences(myPreferences, Context.MODE_PRIVATE)
 
         /*
         mRegisterBtn.setOnClickListener(View.OnClickListener() {
@@ -208,6 +215,12 @@ class Registration : AppCompatActivity() {
         reference1.child(username).setValue(registration)
         reference2.child(username).setValue(login)
         reference3.child(username).setValue(information)
+
+
+        var editor: SharedPreferences.Editor = sharedPreferences.edit()
+        editor.putString("username", username.toString())
+        editor.putString("fullName", fullName.toString())
+        editor.commit()
 
         //send to next activity
         val intent = Intent(this@Registration, UserInterface::class.java)

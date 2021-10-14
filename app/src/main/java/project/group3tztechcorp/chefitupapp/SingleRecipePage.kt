@@ -1,6 +1,8 @@
 package project.group3tztechcorp.chefitupapp
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -19,6 +21,11 @@ class SingleRecipePage : AppCompatActivity() {
     private var ingredientList: ArrayList<String> = ArrayList()
     private var directionsList: ArrayList<String> = ArrayList()
     lateinit var menu: MenuItem
+    lateinit var sharedPreferences: SharedPreferences
+    private var username: String = "user"
+    private var fullName: String = "user"
+
+    private final val myPreferences: String = "MyPref"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +38,11 @@ class SingleRecipePage : AppCompatActivity() {
 
         var intent = getIntent()
         name = intent.getStringExtra("Name").toString().trim()
+
+        sharedPreferences = getSharedPreferences(myPreferences, Context.MODE_PRIVATE)
+        username = sharedPreferences.getString("username", "").toString()
+        fullName = sharedPreferences.getString("fullName", "").toString()
+
 
         reference = FirebaseDatabase.getInstance().getReference("recipes")
         var checkRecipe : Query = reference.orderByChild("Name").equalTo(name)
@@ -75,6 +87,8 @@ class SingleRecipePage : AppCompatActivity() {
 
         binding.backButton.setOnClickListener {
             var intent: Intent = Intent(this@SingleRecipePage, UserInterface::class.java)
+            intent.putExtra("username", username)
+            intent.putExtra("fullName", fullName)
             startActivity(intent)
         }
 

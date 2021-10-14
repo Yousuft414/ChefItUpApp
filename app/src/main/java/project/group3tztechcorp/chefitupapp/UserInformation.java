@@ -73,6 +73,10 @@ public class UserInformation {
         this.achievementsCompleted = achievementsCompleted;
     }
 
+    public void addCompletedRecipes(){
+        this.recipesCompleted += 1;
+    }
+
     public void checkLevel(){
         if (this.experience <= 300){
             this.level = 1;
@@ -87,7 +91,15 @@ public class UserInformation {
         }
     }
 
-    public void increaseExp(int exp){
-        this.experience = this.experience + exp;
+    public void increaseExp(String level){
+        if(level.equals("Easy")) {
+            this.experience += 50;
+        } else if(level.equals("Intermediate")){
+            this.experience += 100;
+        } else if(level.equals("Hard")){
+            this.experience += 150;
+        } else {
+            this.experience += 20;
+        }
     }
 }

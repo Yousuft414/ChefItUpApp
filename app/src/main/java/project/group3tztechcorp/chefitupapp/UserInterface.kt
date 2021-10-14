@@ -31,6 +31,9 @@ class UserInterface : AppCompatActivity() {
         bundle.putString("userName", username)
 
         profileFragment.arguments = bundle
+        recipeHomeFragment.arguments = bundle
+        rewardsPageFragment.arguments = bundle
+        challengesPageFragment.arguments = bundle
 
         bottomNav = findViewById(R.id.bottomNav)
         replaceFragment(profileFragment)

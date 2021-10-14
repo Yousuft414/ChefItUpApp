@@ -53,6 +53,14 @@
             android:layout_toRightOf="@+id/userName"
             android:layout_centerInParent="true"
             tools:progress="60"/>
+        <TextView
+            android:id="@+id/experienceUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/experienceBar"
+            android:layout_toRightOf="@+id/userName"
+            android:layout_centerInParent="true"
+            android:text="Experience: "/>
 
         <TextView
             android:id="@+id/level"

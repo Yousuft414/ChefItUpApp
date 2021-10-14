@@ -120,6 +120,7 @@ class ProfileFragment : Fragment() {
                     binding.recipesCompletedNum.text = recipiesNumFromDB.toString()
                     binding.achievementsNum.text = achivementsNumFromDB.toString()
                     binding.level.text = levelFromDB.toString()
+                    binding.experienceUser.text = "Experience: " + experienceFromDB.toString()
                 }
             }
 

@@ -1,6 +1,9 @@
 package project.group3tztechcorp.chefitupapp
 
+import android.app.Application
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
@@ -22,11 +25,16 @@ class Login : AppCompatActivity() {
     lateinit var mLoginBtn: Button;
     lateinit var mRegisterBtn : TextView;
     lateinit var progressBar: ProgressBar;
+    lateinit var sharedPreferences: SharedPreferences
+
+    private final val myPreferences: String = "MyPref"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_login)
+
+        sharedPreferences = getSharedPreferences(myPreferences, Context.MODE_PRIVATE)
 
         mUsername = findViewById(R.id.editTextUsernameEmail)
         mUsernameText = findViewById(R.id.editTextUsernameEmailText)
@@ -81,6 +89,7 @@ class Login : AppCompatActivity() {
         var userEnteredUsername = mUsernameText.text.toString().trim()
         var userEnteredPassword = mPasswordText.text.toString().trim()
 
+
         var reference : DatabaseReference = FirebaseDatabase.getInstance().getReference("userLogin")
         var reference2 : DatabaseReference = FirebaseDatabase.getInstance().getReference("userRegistration")
 
@@ -106,6 +115,11 @@ class Login : AppCompatActivity() {
                                         var usernameFromDB = snapshot2.child(userEnteredUsername).child("username").getValue()
                                         var phoneFromDB = snapshot2.child(userEnteredUsername).child("phone").getValue()
                                         var emailFromDB = snapshot2.child(userEnteredUsername).child("email").getValue()
+
+                                        var editor: SharedPreferences.Editor = sharedPreferences.edit()
+                                        editor.putString("username", usernameFromDB.toString())
+                                        editor.putString("fullName", nameFromDB.toString())
+                                        editor.commit()
 
                                         val intent = Intent(this@Login, UserInterface::class.java)
                                         intent.putExtra("fullName", nameFromDB.toString())

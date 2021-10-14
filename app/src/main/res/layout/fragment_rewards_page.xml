@@ -1,13 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.RewardsPageFragment">
+    tools:context=".ui.RecipeHomeFragment">
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Rewards Fragment" />
+        android:background="@color/white">
 
-</RelativeLayout>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:padding="10dp"
+                    android:text="My Rewards"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="10dp" >
+
+
+                </androidx.cardview.widget.CardView>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_main_cat_points"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal"
+                    tools:itemCount="1"
+                    tools:listitem="@layout/points_main_category" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_sub_cat_points"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="bottom"
+                    android:orientation="horizontal"
+                    tools:itemCount="1"
+                    tools:listitem="@layout/points_sub_category" />
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="300dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_height="115dp"
+                    android:gravity="center"
+                    android:text="Scan receipt" />
+
+
+            </LinearLayout>
+        </ScrollView>
+
+    </RelativeLayout>
+</layout>
