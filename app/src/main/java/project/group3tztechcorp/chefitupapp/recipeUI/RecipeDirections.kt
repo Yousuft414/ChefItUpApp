@@ -9,15 +9,14 @@ import android.widget.AdapterView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.database.*
-import project.group3tztechcorp.chefitupapp.Direction
+import project.group3tztechcorp.chefitupapp.*
 import project.group3tztechcorp.chefitupapp.R
-import project.group3tztechcorp.chefitupapp.UserInformation
-import project.group3tztechcorp.chefitupapp.UserInterface
 import project.group3tztechcorp.chefitupapp.adapter.DirectionAdapter
 import project.group3tztechcorp.chefitupapp.databinding.ActivityRecipeDirectionsBinding
 
 class RecipeDirections : AppCompatActivity() {
     private lateinit var reference: DatabaseReference
+    private lateinit var reference2: DatabaseReference
     private lateinit var binding: ActivityRecipeDirectionsBinding
     lateinit var name: String
     private var checked: Boolean = false
@@ -26,6 +25,8 @@ class RecipeDirections : AppCompatActivity() {
     private var username: String = "user"
     private var recipeLevel: String = "Easy"
     private var fullName: String = "user"
+    private var completedList: ArrayList<String> = ArrayList<String>()
+    private var completed: Boolean = false
 
     private final val myPreferences: String = "MyPref"
 
@@ -91,6 +92,44 @@ class RecipeDirections : AppCompatActivity() {
                     }
 
                     override fun onCancelled(error: DatabaseError) {}
+                })
+
+                reference2 = FirebaseDatabase.getInstance().getReference("CompletedRecipes")
+
+                var check: Query = reference2.orderByChild("username").equalTo(username)
+
+                check.addListenerForSingleValueEvent(object : ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if(snapshot.exists()){
+                            snapshot.child(username).child("completedList").children.forEach {
+                                completedList.add(it.getValue().toString())
+                            }
+                            for(item in completedList){
+                                if(item.equals(name)){
+                                    completed = true
+                                    break
+                                } else {
+                                    completed = false
+                                }
+                            }
+                            if(!completed){
+                                completedList.add(name)
+                            } else {
+
+                            }
+                            var completedRecipe = UserCompletedRecipe(username, completedList)
+                            reference2.child(username).child("completedList").setValue(completedRecipe.completedList)
+                        } else {
+                            completedList.add(name)
+                            var completedRecipe = UserCompletedRecipe(username, completedList)
+                            reference2.child(username).setValue(completedRecipe)
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+
                 })
 
                 var intent: Intent = Intent(this@RecipeDirections, UserInterface::class.java)

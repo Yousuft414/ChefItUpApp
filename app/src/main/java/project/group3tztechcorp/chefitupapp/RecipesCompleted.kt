@@ -1,36 +1,98 @@
 package project.group3tztechcorp.chefitupapp
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.*
+import project.group3tztechcorp.chefitupapp.adapter.CompletedRecipeAdapter
+import project.group3tztechcorp.chefitupapp.adapter.SubCategoryAdapter
+import project.group3tztechcorp.chefitupapp.databinding.ActivityRecipesCompletedBinding
+
+private const val TAG = "MyActivity"
 
 class RecipesCompleted : AppCompatActivity() {
+
+    private lateinit var reference: DatabaseReference
+    private lateinit var reference2: DatabaseReference
+    private lateinit var recipeRecyclerView: RecyclerView
+    private lateinit var recipeArrayList: ArrayList<Recipe>
+    private var completedList: ArrayList<String> = ArrayList<String>()
+    lateinit var binding: ActivityRecipesCompletedBinding
+    private var username: String = "user"
+    lateinit var sharedPreferences: SharedPreferences
+
+    private final val myPreferences: String = "MyPref"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_recipes_completed)
-        val ourList = generateDummyList(3)
-        val recycleView = findViewById<RecyclerView>(R.id.recycleView)
-        recycleView.adapter = MyRecyclerView(ourList)
-        recycleView.layoutManager = LinearLayoutManager(this)
-        recycleView.setHasFixedSize(true)
+        //setContentView(R.layout.activity_recipes_completed)
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_recipes_completed)
+
+        sharedPreferences = getSharedPreferences(myPreferences, Context.MODE_PRIVATE)
+        username = sharedPreferences.getString("username", "").toString()
+
+        recipeRecyclerView = binding.recycleViewCompletedRecipes
+        recipeRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        recipeRecyclerView.setHasFixedSize(true)
+
+        recipeArrayList = arrayListOf<Recipe>()
+        Log.i(TAG, "hello" + username)
+
+        getAllRecipies()
+
     }
 
-    private fun generateDummyList(size: Int): List<ListItem> {
-        val list = ArrayList<ListItem>()
-        var drawable = R.drawable.recipe_completed
-        var text1 = ""
-        for (i in 0 until size) {
-            if (i % 3 == 0) {
-                text1 = "Chocolate Drip Cake"
-            } else if (i % 3 == 1) {
-                text1 = "Pineapple Coconut Cake"
-            } else {
-                text1 = "Simple White Cake"
+    fun getAllRecipies() {
+        reference = FirebaseDatabase.getInstance().getReference("CompletedRecipes")
+        reference2 = FirebaseDatabase.getInstance().getReference("recipes")
+
+        var check: Query = reference.orderByChild("username").equalTo(username)
+
+        check.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    Log.i(TAG, username)
+                    snapshot.child(username).child("completedList").children.forEach {
+                        completedList.add(it.getValue().toString())
+                    }
+                    reference2.addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if (snapshot.exists()) {
+                                for (recipeSnapshot in snapshot.children) {
+                                    for (item in completedList){
+                                        if (item.equals(
+                                                recipeSnapshot.child("Name").getValue().toString()
+                                                    .trim())){
+                                            val recipe = recipeSnapshot.getValue(Recipe::class.java)
+                                            recipeArrayList.add(recipe!!)
+                                            for (recipe in recipeArrayList){
+                                                Log.i(TAG, "recipes" + recipe.Name)
+                                            }
+                                        }
+                                    }
+                                }
+                                recipeRecyclerView.adapter = CompletedRecipeAdapter(recipeArrayList)
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            TODO("Not yet implemented")
+                        }
+
+                    })
+                }
             }
-            val item = ListItem(drawable, text1)
-            list += item
-        }
-        return list
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 }
