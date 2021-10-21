@@ -1,11 +1,22 @@
 package project.group3tztechcorp.chefitupapp.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import org.json.JSONObject
 import project.group3tztechcorp.chefitupapp.R
+import project.group3tztechcorp.chefitupapp.databinding.FragmentRewardsPageBinding
+import java.io.BufferedReader
+import java.io.DataOutputStream
+import java.io.InputStreamReader
+import java.lang.StringBuilder
+import java.net.URL
+import java.net.URLEncoder
+import javax.net.ssl.HttpsURLConnection
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,6 +33,10 @@ class RewardsPageFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    lateinit var binding: FragmentRewardsPageBinding
+    private var params: JSONObject? = null
+    private var resultFinal:String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -35,7 +50,90 @@ class RewardsPageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_rewards_page, container, false)
+        //return inflater.inflate(R.layout.fragment_rewards_page, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_rewards_page, container, false)
+
+        binding.button.setOnClickListener {
+
+            val url = URL("https://api.ocr.space/parse/image")
+            val con = url.openConnection() as HttpsURLConnection
+            Log.d("myTag", "part1");
+
+            con.requestMethod = "POST"
+            con.setRequestProperty("User-Agent", "Mozilla/5.0")
+            con.setRequestProperty("Accept-Language", "en-US,en;q=0.5")
+
+            val postDataParams = JSONObject()
+
+            postDataParams.put("apikey", "6be08db4d888957")
+            postDataParams.put("isOverlayRequired", true)
+            postDataParams.put("url", "https://cdn.filestackcontent.com/iYfZsZ8mSEWP85T8gHve")
+            postDataParams.put("language", "eng")
+            Log.d("myTag", "part2");
+            con.doOutput = true
+            val wr = DataOutputStream(con.outputStream)
+            Log.d("myTag", "part3");
+            wr.writeBytes(getPostDataString(postDataParams))
+            Log.d("myTag", "part4");
+            wr.flush()
+            Log.d("myTag", "part5");
+            wr.close()
+            Log.d("myTag", "part6");
+
+            val `in` = BufferedReader(InputStreamReader(con.inputStream))
+            var inputLine: String?
+            val response = StringBuilder()
+
+            while (`in`.readLine().also { inputLine = it } != null) {
+                response.append(inputLine)
+            }
+            `in`.close()
+            print(3)
+            Log.d("OCR.Space", response.toString())
+            val jsonData = JSONObject(response.toString())
+
+            print(4)
+            if (jsonData.has("ParsedResults")) {
+                params= jsonData.getJSONArray("ParsedResults").getJSONObject(0)
+            } else if (jsonData.has("IsErroredOnProcessing") && jsonData.getBoolean("IsErroredOnProcessing")) {
+                params= jsonData
+            }
+            val result = StringBuilder()
+            val itr = params!!.keys()
+            print(5)
+
+            var first = true
+            while (itr.hasNext()) {
+                val key = itr.next()
+                val value = params!![key]
+                if (first) first = false else result.append("&")
+                result.append(URLEncoder.encode(key, "UTF-8"))
+                result.append("=")
+                result.append(URLEncoder.encode(value.toString(), "UTF-8"))
+                print(6)
+            }
+            resultFinal=result.toString()
+            print(resultFinal)
+        }
+
+        return binding.root
+    }
+
+    @Throws(java.lang.Exception::class)
+    private fun getPostDataString(params: JSONObject): String? {
+        val result = StringBuilder()
+        val itr = params.keys()
+        var first = true
+        while (itr.hasNext()) {
+            val key = itr.next()
+            val value = params[key]
+            if (first) first = false else result.append("&")
+            result.append(URLEncoder.encode(key, "UTF-8"))
+            result.append("=")
+            result.append(URLEncoder.encode(value.toString(), "UTF-8"))
+        }
+        return result.toString()
     }
 
     companion object {
