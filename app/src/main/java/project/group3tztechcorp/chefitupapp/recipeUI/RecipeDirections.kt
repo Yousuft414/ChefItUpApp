@@ -60,7 +60,9 @@ class RecipeDirections : AppCompatActivity() {
             val directions: Direction = directionArray!![position] as Direction
             directions.selected = !directions.selected
             adapter.notifyDataSetChanged()
+        }
 
+        binding.completeButton.setOnClickListener {
             for(i in 0 until adapter.count) {
                 var direction: Direction = adapter.getItem(i)
                 if (!direction.selected) {
@@ -70,9 +72,6 @@ class RecipeDirections : AppCompatActivity() {
                     checked = true
                 }
             }
-        }
-
-        binding.completeButton.setOnClickListener {
             if(checked){
                 reference = FirebaseDatabase.getInstance().getReference("userInformation")
                 reference2 = FirebaseDatabase.getInstance().getReference("CompletedRecipes")

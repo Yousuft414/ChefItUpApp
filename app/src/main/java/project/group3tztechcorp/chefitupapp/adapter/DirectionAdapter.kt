@@ -43,6 +43,12 @@ class DirectionAdapter(private val directionList : ArrayList<Direction>, context
         val item: Direction = getItem(position)
         viewHolder.name.text = item.Name
         viewHolder.check.isChecked = item.selected
+
+        viewHolder.check.setOnClickListener {
+            item.selected = !item.selected
+            notifyDataSetChanged()
+        }
+
         return result
     }
 }

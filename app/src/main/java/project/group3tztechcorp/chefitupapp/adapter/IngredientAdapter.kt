@@ -43,6 +43,11 @@ class IngredientAdapter (private val ingredientList : ArrayList<Ingredient>, con
         val item: Ingredient = getItem(position)
         viewHolder.name.text = item.Name
         viewHolder.check.isChecked = item.selected
+
+        viewHolder.check.setOnClickListener {
+            item.selected = !item.selected
+            notifyDataSetChanged()
+        }
         return result
     }
 }

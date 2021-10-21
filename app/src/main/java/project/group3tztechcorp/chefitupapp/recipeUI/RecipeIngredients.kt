@@ -6,7 +6,9 @@ import android.graphics.BlendModeColorFilter
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.AdapterView
+import android.widget.CheckBox
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +20,8 @@ import project.group3tztechcorp.chefitupapp.R
 import project.group3tztechcorp.chefitupapp.adapter.IngredientAdapter
 import project.group3tztechcorp.chefitupapp.databinding.ActivityRecipeIngredientsBinding
 import project.group3tztechcorp.chefitupapp.databinding.ActivitySingleRecipePageBinding
+
+private const val TAG = "MyActivity"
 
 class RecipeIngredients : AppCompatActivity() {
 
@@ -47,7 +51,9 @@ class RecipeIngredients : AppCompatActivity() {
             val ingredients: Ingredient = ingredientArrayList!![position] as Ingredient
             ingredients.selected = !ingredients.selected
             adapter.notifyDataSetChanged()
+        }
 
+        binding.nextButton.setOnClickListener {
             for(i in 0 until adapter.count) {
                 var ingredient: Ingredient = adapter.getItem(i)
                 if (!ingredient.selected) {
@@ -57,9 +63,6 @@ class RecipeIngredients : AppCompatActivity() {
                     checked = true
                 }
             }
-        }
-
-        binding.nextButton.setOnClickListener {
             if(checked) {
                 var intent: Intent = Intent(this@RecipeIngredients, RecipeDirections::class.java)
                 intent.putExtra("recipe", name)
