@@ -3,6 +3,7 @@ package project.group3tztechcorp.chefitupapp
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -16,6 +17,7 @@ import project.group3tztechcorp.chefitupapp.recipeUI.RecipeIngredients
 class SingleRecipePage : AppCompatActivity() {
 
     lateinit var name: String
+    private var check: Int = 0
     private lateinit var binding: ActivitySingleRecipePageBinding
     private lateinit var reference: DatabaseReference
     private var ingredientList: ArrayList<String> = ArrayList()
@@ -38,6 +40,10 @@ class SingleRecipePage : AppCompatActivity() {
 
         var intent = getIntent()
         name = intent.getStringExtra("Name").toString().trim()
+        check = intent.getIntExtra("Check", 0)
+        if(check == 1){
+            this.window.decorView.setBackgroundColor(Color.RED)
+        }
 
         sharedPreferences = getSharedPreferences(myPreferences, Context.MODE_PRIVATE)
         username = sharedPreferences.getString("username", "").toString()
@@ -95,6 +101,7 @@ class SingleRecipePage : AppCompatActivity() {
         binding.startButton.setOnClickListener {
             var intent: Intent = Intent(this@SingleRecipePage, RecipeIngredients::class.java)
             intent.putExtra("recipe", name)
+            intent.putExtra("Check", check)
             startActivity(intent)
         }
     }

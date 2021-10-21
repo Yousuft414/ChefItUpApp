@@ -58,8 +58,10 @@ class RecipesCompleted : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     Log.i(TAG, username)
-                    snapshot.child(username).child("completedList").children.forEach {
-                        completedList.add(it.getValue().toString())
+                    if (completedList.isEmpty()) {
+                        snapshot.child(username).child("completedList").children.forEach {
+                                completedList.add(it.getValue().toString())
+                        }
                     }
                     reference2.addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {

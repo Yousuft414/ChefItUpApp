@@ -26,6 +26,7 @@ class RecipeIngredients : AppCompatActivity() {
     private lateinit var binding: ActivityRecipeIngredientsBinding
     private lateinit var adapter: IngredientAdapter
     lateinit var name: String
+    private var check: Int = 0
     private var checked: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +34,10 @@ class RecipeIngredients : AppCompatActivity() {
         //setContentView(R.layout.activity_recipe_ingredients)
         var intent = getIntent()
         name = intent.getStringExtra("recipe").toString().trim()
+        check = intent.getIntExtra("Check", 0)
+        if(check == 1){
+            this.window.decorView.setBackgroundColor(Color.RED)
+        }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_recipe_ingredients)
 
 
@@ -58,6 +63,7 @@ class RecipeIngredients : AppCompatActivity() {
             if(checked) {
                 var intent: Intent = Intent(this@RecipeIngredients, RecipeDirections::class.java)
                 intent.putExtra("recipe", name)
+                intent.putExtra("Check", check)
                 startActivity(intent)
             } else {
                 Toast.makeText(this,"You have not checked off all the ingredients", Toast.LENGTH_SHORT).show()

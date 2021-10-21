@@ -3,8 +3,10 @@ package project.group3tztechcorp.chefitupapp.recipeUI
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -13,6 +15,8 @@ import project.group3tztechcorp.chefitupapp.*
 import project.group3tztechcorp.chefitupapp.R
 import project.group3tztechcorp.chefitupapp.adapter.DirectionAdapter
 import project.group3tztechcorp.chefitupapp.databinding.ActivityRecipeDirectionsBinding
+
+private const val TAG = "MyActivity"
 
 class RecipeDirections : AppCompatActivity() {
     private lateinit var reference: DatabaseReference
@@ -27,6 +31,7 @@ class RecipeDirections : AppCompatActivity() {
     private var fullName: String = "user"
     private var completedList: ArrayList<String> = ArrayList<String>()
     private var completed: Boolean = false
+    private var check: Int = 0
 
     private final val myPreferences: String = "MyPref"
 
@@ -40,6 +45,10 @@ class RecipeDirections : AppCompatActivity() {
 
         var intent = getIntent()
         name = intent.getStringExtra("recipe").toString().trim()
+        check = intent.getIntExtra("Check", 0)
+        if(check == 1){
+            this.window.decorView.setBackgroundColor(Color.RED)
+        }
 
         sharedPreferences = getSharedPreferences(myPreferences, Context.MODE_PRIVATE)
         username = sharedPreferences.getString("username", "").toString()
@@ -66,6 +75,7 @@ class RecipeDirections : AppCompatActivity() {
         binding.completeButton.setOnClickListener {
             if(checked){
                 reference = FirebaseDatabase.getInstance().getReference("userInformation")
+                reference2 = FirebaseDatabase.getInstance().getReference("CompletedRecipes")
                 var checkUser: Query = reference.orderByChild("username").equalTo(username)
 
                 checkUser.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -81,20 +91,53 @@ class RecipeDirections : AppCompatActivity() {
 
                             user = UserInformation(username, nameFromDB.toString(), levelFromDB.toString().toInt(), experienceFromDB.toString().toInt(), rewardsNumFromDB.toString().toInt(), recipiesNumFromDB.toString().toInt(), achivementsNumFromDB.toString().toInt())
 
-                            user.increaseExp(recipeLevel)
+                            if(check == 0) {
+                                user.increaseExp(recipeLevel)
+                            } else if(check == 1){
+                                user.increaseExpChallenge(recipeLevel)
+                            }
                             user.checkLevel()
-                            user.addCompletedRecipes()
 
                             reference.child(username).child("level").setValue(user.level)
                             reference.child(username).child("experience").setValue(user.experience)
-                            reference.child(username).child("recipesCompleted").setValue(user.recipesCompleted)
+
+                            var checks: Query = reference2.orderByChild("username").equalTo(username)
+                            checks.addListenerForSingleValueEvent(object : ValueEventListener{
+                                override fun onDataChange(snapshot: DataSnapshot) {
+                                    if(snapshot.exists()) {
+                                        var checkRecipe = false
+                                        for(recipe in snapshot.child(username).child("completedList").children){
+                                            if(recipe.getValue().toString().equals(name)){
+                                                Log.i(TAG, "not adding recipe")
+                                                checkRecipe = true
+                                                break
+                                            } else {
+                                                Log.i(TAG, "adding recipe")
+                                                checkRecipe = false
+                                            }
+                                        }
+                                        if(!checkRecipe){
+                                           user.addCompletedRecipes()
+                                        }else{
+
+                                        }
+                                        reference.child(username).child("recipesCompleted").setValue(user.recipesCompleted)
+                                    } else {
+                                        user.addCompletedRecipes()
+                                        reference.child(username).child("recipesCompleted").setValue(user.recipesCompleted)
+                                    }
+                                }
+
+                                override fun onCancelled(error: DatabaseError) {
+                                    TODO("Not yet implemented")
+                                }
+
+                            })
                         }
                     }
 
                     override fun onCancelled(error: DatabaseError) {}
                 })
-
-                reference2 = FirebaseDatabase.getInstance().getReference("CompletedRecipes")
 
                 var check: Query = reference2.orderByChild("username").equalTo(username)
 

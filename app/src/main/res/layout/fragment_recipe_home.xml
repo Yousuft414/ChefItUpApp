@@ -24,7 +24,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="serif"
                     android:padding="10dp"
-                    android:text="Recipe Fragment"
+                    android:textAlignment="center"
+                    android:text="Recipes Home"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
 

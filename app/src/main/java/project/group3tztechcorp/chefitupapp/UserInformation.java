@@ -102,4 +102,16 @@ public class UserInformation {
             this.experience += 20;
         }
     }
+
+    public void increaseExpChallenge(String level){
+        if(level.equals("Easy")) {
+            this.experience += 100;
+        } else if(level.equals("Intermediate")){
+            this.experience += 200;
+        } else if(level.equals("Hard")){
+            this.experience += 300;
+        } else {
+            this.experience += 40;
+        }
+    }
 }
