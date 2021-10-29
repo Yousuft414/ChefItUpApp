@@ -1,6 +1,8 @@
 package project.group3tztechcorp.chefitupapp.recipeUI
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
@@ -17,6 +19,7 @@ import com.google.firebase.database.*
 import project.group3tztechcorp.chefitupapp.Direction
 import project.group3tztechcorp.chefitupapp.Ingredient
 import project.group3tztechcorp.chefitupapp.R
+import project.group3tztechcorp.chefitupapp.UserGroceryList
 import project.group3tztechcorp.chefitupapp.adapter.IngredientAdapter
 import project.group3tztechcorp.chefitupapp.databinding.ActivityRecipeIngredientsBinding
 import project.group3tztechcorp.chefitupapp.databinding.ActivitySingleRecipePageBinding
@@ -26,12 +29,21 @@ private const val TAG = "MyActivity"
 class RecipeIngredients : AppCompatActivity() {
 
     private lateinit var reference: DatabaseReference
+    private lateinit var reference2: DatabaseReference
     private var ingredientArrayList: ArrayList<Ingredient> = ArrayList<Ingredient>()
+    private var groceryList: ArrayList<String> = ArrayList<String>()
+    private var groceryList2: ArrayList<String> = ArrayList<String>()
     private lateinit var binding: ActivityRecipeIngredientsBinding
     private lateinit var adapter: IngredientAdapter
+    private lateinit var context: Context
     lateinit var name: String
     private var check: Int = 0
+    private var ingredients: String = ""
     private var checked: Boolean = false
+    lateinit var sharedPreferences: SharedPreferences
+    private var username: String = "user"
+
+    private final val myPreferences: String = "MyPref"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +51,12 @@ class RecipeIngredients : AppCompatActivity() {
         var intent = getIntent()
         name = intent.getStringExtra("recipe").toString().trim()
         check = intent.getIntExtra("Check", 0)
+
+        context = this
+
+        sharedPreferences = getSharedPreferences(myPreferences, Context.MODE_PRIVATE)
+        username = sharedPreferences.getString("username", "").toString()
+
         if(check == 1){
             this.window.decorView.setBackgroundColor(Color.RED)
         }
@@ -70,6 +88,107 @@ class RecipeIngredients : AppCompatActivity() {
                 startActivity(intent)
             } else {
                 Toast.makeText(this,"You have not checked off all the ingredients", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        binding.checkAll.setOnClickListener {
+            for(i in 0 until adapter.count){
+                var ingredient: Ingredient = ingredientArrayList[i]
+                ingredient.selected = true
+            }
+            adapter.notifyDataSetChanged()
+        }
+
+        binding.checkNone.setOnClickListener {
+            for(i in 0 until adapter.count){
+                var ingredient: Ingredient = ingredientArrayList[i]
+                ingredient.selected = false
+            }
+            adapter.notifyDataSetChanged()
+        }
+
+        binding.sendToList.setOnClickListener {
+
+            groceryList.clear()
+            groceryList2.clear()
+
+            reference2 = FirebaseDatabase.getInstance().getReference("GroceryList")
+            var checkGroceryList : Query = reference2.orderByChild("username").equalTo(username)
+
+            for(i in 0 until adapter.count){
+                var ingredient: Ingredient = ingredientArrayList[i]
+                if (!ingredient.selected){
+                    checked = false
+                    break
+                } else {
+                    checked = true
+                }
+            }
+
+            if(!checked) {
+                checkGroceryList.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            Log.i(TAG, "User exists")
+                            snapshot.child(username).child("groceryList").children.forEach {
+                                groceryList.add(it.getValue().toString())
+                            }
+                            for (i in 0 until adapter.count) {
+                                var ingredient: Ingredient = ingredientArrayList[i]
+                                if (!ingredient.selected) {
+                                    groceryList.add(ingredient.Name)
+                                    groceryList2.add(ingredient.Name)
+                                }
+                            }
+
+                            reference2.child(username).child("groceryList").setValue(groceryList)
+
+                            for(i in 0 until groceryList2.size){
+                                if(i == groceryList2.size - 1){
+                                    ingredients += groceryList2[i] + "."
+                                } else if (i == 0) {
+                                    ingredients = groceryList2[i] + ", "
+                                } else {
+                                    ingredients += groceryList2[i] + ", "
+                                }
+                            }
+                            Toast.makeText(context,
+                                "The following ingredients have been added: \n" + ingredients,
+                                Toast.LENGTH_LONG).show()
+                        } else {
+                            Log.i(TAG, "User doesnt exist")
+                            for (i in 0 until adapter.count) {
+                                var ingredient: Ingredient = ingredientArrayList[i]
+                                if (!ingredient.selected) {
+                                    groceryList.add(ingredient.Name)
+                                    groceryList2.add(ingredient.Name)
+                                }
+                            }
+                            var userGroceryList = UserGroceryList(username, groceryList)
+                            reference2.child(username).setValue(userGroceryList)
+
+                            for(i in 0 until groceryList2.size){
+                                if(i == groceryList2.size){
+                                    ingredients += groceryList2[i] + "."
+                                } else {
+                                    ingredients += groceryList2[i] + ", "
+                                }
+                            }
+                            Toast.makeText(context,
+                                "The following ingredients have been added: \n" + ingredients,
+                                Toast.LENGTH_LONG).show()
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+
+                })
+            } else {
+                Toast.makeText(this,
+                    "All the ingredients have been checked! You must uncheck ingredient to add to list",
+                Toast.LENGTH_LONG).show()
             }
         }
     }

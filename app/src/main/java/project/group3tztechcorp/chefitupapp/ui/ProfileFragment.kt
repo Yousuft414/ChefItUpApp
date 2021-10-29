@@ -50,7 +50,7 @@ class ProfileFragment : Fragment() {
 
         binding.accountBtn.setOnClickListener { view: View ->
             //view.findNavController().navigate(R.id.action_profileFragment_to_accountInformationFragment)
-            startActivity(Intent(context, GroceryList::class.java))
+            startActivity(Intent(context, GroceryListPage::class.java))
         }
         /*
         binding.rewardsGainedBtn.setOnClickListener{

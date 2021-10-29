@@ -25,10 +25,12 @@ class UserInterface : AppCompatActivity() {
         var intent = getIntent()
         var fullName = intent.getStringExtra("fullName").toString().trim()
         var username = intent.getStringExtra("username").toString().trim()
+        var date = intent.getStringExtra("savedDate").toString().trim()
 
         var bundle = Bundle()
         bundle.putString("fullName", fullName)
         bundle.putString("userName", username)
+        bundle.putString("date", date)
 
         profileFragment.arguments = bundle
         recipeHomeFragment.arguments = bundle

@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
@@ -14,6 +15,11 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.*
 import project.group3tztechcorp.chefitupapp.ui.ProfileFragment
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.*
+
+private const val TAG = "MyActivity"
 
 class Login : AppCompatActivity() {
     lateinit var mUsername: TextInputLayout;
@@ -26,6 +32,9 @@ class Login : AppCompatActivity() {
     lateinit var mRegisterBtn : TextView;
     lateinit var progressBar: ProgressBar;
     lateinit var sharedPreferences: SharedPreferences
+    lateinit var localDate: Calendar
+    lateinit var dateFormat: SimpleDateFormat
+    lateinit var date: String
 
     private final val myPreferences: String = "MyPref"
 
@@ -35,6 +44,7 @@ class Login : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         sharedPreferences = getSharedPreferences(myPreferences, Context.MODE_PRIVATE)
+
 
         mUsername = findViewById(R.id.editTextUsernameEmail)
         mUsernameText = findViewById(R.id.editTextUsernameEmailText)
@@ -116,9 +126,24 @@ class Login : AppCompatActivity() {
                                         var phoneFromDB = snapshot2.child(userEnteredUsername).child("phone").getValue()
                                         var emailFromDB = snapshot2.child(userEnteredUsername).child("email").getValue()
 
+
                                         var editor: SharedPreferences.Editor = sharedPreferences.edit()
                                         editor.putString("username", usernameFromDB.toString())
                                         editor.putString("fullName", nameFromDB.toString())
+
+                                        if(sharedPreferences.getString("date", "").toString().isEmpty()) {
+                                            Log.i(TAG, "The date doesnt exist")
+                                            localDate = Calendar.getInstance()
+                                            dateFormat = SimpleDateFormat("MM/dd/yyyy")
+                                            date = dateFormat.format(localDate.time)
+                                            editor.putString("date", date)
+                                            Log.i(TAG, "This is the new saved date:" + date)
+                                        } else {
+                                            Log.i(TAG, "The date does exist")
+                                            date = sharedPreferences.getString("date", "").toString()
+                                            Log.i(TAG, "This is the date saved: " + date)
+                                        }
+
                                         editor.commit()
 
                                         val intent = Intent(this@Login, UserInterface::class.java)
@@ -127,6 +152,7 @@ class Login : AppCompatActivity() {
                                         intent.putExtra("email", emailFromDB.toString())
                                         intent.putExtra("phone", phoneFromDB.toString())
                                         intent.putExtra("password", passwordFromDB.toString())
+                                        intent.putExtra("savedDate", date)
 
                                         startActivity(intent)
                                     }

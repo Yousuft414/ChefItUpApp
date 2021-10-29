@@ -3,10 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Taha/School/Semester 6/Capstone Project/Code/ChefItUpApp/app/src/main/res/drawable-v24/ic_baseline_add.xml" value="0.23489583333333333" />
+        <entry key="..\:/Users/Taha/School/Semester 6/Capstone Project/Code/ChefItUpApp/app/src/main/res/drawable-v24/ic_baseline_remove.xml" value="0.23489583333333333" />
         <entry key="..\:/Users/Taha/School/Semester 6/Capstone Project/Code/ChefItUpApp/app/src/main/res/drawable/experience_bar.xml" value="0.403125" />
         <entry key="..\:/Users/Taha/School/Semester 6/Capstone Project/Code/ChefItUpApp/app/src/main/res/drawable/search_bg.xml" value="0.23489583333333333" />
+        <entry key="..\:/Users/Taha/School/Semester 6/Capstone Project/Code/ChefItUpApp/app/src/main/res/layout/achievement_view.xml" value="0.21875" />
         <entry key="..\:/Users/Taha/School/Semester 6/Capstone Project/Code/ChefItUpApp/app/src/main/res/layout/activity_achievements.xml" value="0.21927083333333333" />
         <entry key="..\:/Users/Taha/School/Semester 6/Capstone Project/Code/ChefItUpApp/app/src/main/res/layout/activity_grocery_list.xml" value="0.38697916666666665" />
+        <entry key="..\:/Users/Taha/School/Semester 6/Capstone Project/Code/ChefItUpApp/app/src/main/res/layout/activity_grocery_list_page.xml" value="0.21875" />
         <entry key="..\:/Users/Taha/School/Semester 6/Capstone Project/Code/ChefItUpApp/app/src/main/res/layout/activity_login.xml" value="0.33" />
         <entry key="..\:/Users/Taha/School/Semester 6/Capstone Project/Code/ChefItUpApp/app/src/main/res/layout/activity_main.xml" value="0.2957427536231884" />
         <entry key="..\:/Users/Taha/School/Semester 6/Capstone Project/Code/ChefItUpApp/app/src/main/res/layout/activity_recipe_directions.xml" value="0.38697916666666665" />
@@ -26,6 +30,7 @@
         <entry key="..\:/Users/Taha/School/Semester 6/Capstone Project/Code/ChefItUpApp/app/src/main/res/layout/fragment_recipe_home.xml" value="0.25" />
         <entry key="..\:/Users/Taha/School/Semester 6/Capstone Project/Code/ChefItUpApp/app/src/main/res/layout/fragment_recipies_completed.xml" value="0.38697916666666665" />
         <entry key="..\:/Users/Taha/School/Semester 6/Capstone Project/Code/ChefItUpApp/app/src/main/res/layout/fragment_rewards_page.xml" value="0.28306159420289856" />
+        <entry key="..\:/Users/Taha/School/Semester 6/Capstone Project/Code/ChefItUpApp/app/src/main/res/layout/grocery_list_view.xml" value="0.21875" />
         <entry key="..\:/Users/Taha/School/Semester 6/Capstone Project/Code/ChefItUpApp/app/src/main/res/layout/ingredient_item.xml" value="0.38697916666666665" />
         <entry key="..\:/Users/Taha/School/Semester 6/Capstone Project/Code/ChefItUpApp/app/src/main/res/layout/item_main_category.xml" value="0.21875" />
         <entry key="..\:/Users/Taha/School/Semester 6/Capstone Project/Code/ChefItUpApp/app/src/main/res/layout/item_sub_category.xml" value="0.33" />

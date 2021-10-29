@@ -77,6 +77,18 @@ public class UserInformation {
         this.recipesCompleted += 1;
     }
 
+    public void addAchievementsCompleted(){
+        this.achievementsCompleted += 1;
+    }
+
+    public void addRewards(){
+        this.rewards += 1;
+    }
+
+    public void resetRewards(){
+        this.rewards = 0;
+    }
+
     public void checkLevel(){
         if (this.experience <= 300){
             this.level = 1;

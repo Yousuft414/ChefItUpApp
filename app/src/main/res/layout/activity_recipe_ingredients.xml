@@ -3,35 +3,95 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".recipeUI.RecipeIngredients">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/headerTextView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ingredients"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="@color/black"/>
+            android:layout_height="75dp"
+            android:id="@+id/topSection">
 
-        <ListView
-            android:id="@+id/recipe_ingredientList"
+            <TextView
+                android:id="@+id/headerTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ingredients"
+                android:layout_centerInParent="true"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/nextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/headerTextView"
+                android:layout_alignParentRight="true"
+                android:backgroundTint="@color/gray"
+                android:text="Next" />
+        </RelativeLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/nextButton"
-            android:layout_alignParentLeft="true"
-            android:padding="3dp" />
+            android:layout_height="match_parent"
+            android:layout_below="@+id/topSection">
 
-        <Button
-            android:id="@+id/nextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Next"
-            android:layout_alignRight="@+id/headerTextView"
-            android:layout_alignParentRight="true"
-            android:backgroundTint="@color/gray"/>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/recipes_completed_btn"
+                android:layout_width="275dp"
+                android:layout_height="match_parent"
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="10dp"
+                android:layout_margin="10dp">
+
+                <RelativeLayout
+                    android:layout_width="275dp"
+                    android:layout_height="match_parent"
+                    android:padding="5dp">
+                    <ListView
+                        android:id="@+id/recipe_ingredientList"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:padding="3dp" />
+
+                </RelativeLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="3dp">
+            <Button
+                android:id="@+id/checkAll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/yellow"
+                android:layout_above="@+id/checkNone"
+                android:textSize="11dp"
+                android:text="Check All"/>
+
+                <Button
+                    android:id="@+id/checkNone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:backgroundTint="@color/yellow"
+                    android:textSize="11dp"
+                    android:text="Check None" />
+                <Button
+                    android:id="@+id/sendToList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/checkNone"
+                    android:backgroundTint="@color/yellow"
+                    android:textSize="11dp"
+                    android:text="Add to List" />
+            </RelativeLayout>
+
+        </LinearLayout>
 
     </RelativeLayout>
 

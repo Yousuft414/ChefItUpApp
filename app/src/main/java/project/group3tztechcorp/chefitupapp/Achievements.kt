@@ -1,41 +1,114 @@
 package project.group3tztechcorp.chefitupapp
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.*
+import project.group3tztechcorp.chefitupapp.adapter.AchievementsAdapter
+import project.group3tztechcorp.chefitupapp.databinding.ActivityAchievementsBinding
 
 class Achievements : AppCompatActivity() {
+
+    private lateinit var reference: DatabaseReference
+    private lateinit var reference2: DatabaseReference
+    private lateinit var reference3: DatabaseReference
+    private lateinit var achievementRecyclerView: RecyclerView
+    private lateinit var achievementArrayList: ArrayList<Achievement>
+    private var completedList: ArrayList<String> = ArrayList<String>()
+    lateinit var binding:ActivityAchievementsBinding
+    private var username: String = "user"
+    private var count: Int = 0
+    lateinit var sharedPreferences: SharedPreferences
+
+    private final val myPreferences: String = "MyPref"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_achievements)
+        //setContentView(R.layout.activity_achievements)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_achievements)
 
-        val ourList = generateDummyList(5)
-        val recycleView = findViewById<RecyclerView>(R.id.recycleView)
-        recycleView.adapter = MyRecyclerView(ourList)
-        recycleView.layoutManager = LinearLayoutManager(this)
-        recycleView.setHasFixedSize(true)
+        achievementArrayList = arrayListOf<Achievement>()
+
+        sharedPreferences = getSharedPreferences(myPreferences, Context.MODE_PRIVATE)
+        username = sharedPreferences.getString("username", "").toString()
+
+        var reference3: DatabaseReference =
+            FirebaseDatabase.getInstance().getReference("userInformation")
+
+        var checkUser: Query = reference3.orderByChild("username").equalTo(username)
+
+        achievementRecyclerView = binding.achievementsRecycleView
+        achievementRecyclerView.layoutManager = GridLayoutManager(this, 3)
+        achievementRecyclerView.setHasFixedSize(true)
+
+        getAchievements()
+
+        checkUser.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    //get data from database
+                    var achivementsNumFromDB = snapshot.child(username).child("achievementsCompleted").getValue()
+                    //set the data
+                    binding.userName.text = username
+                    binding.achievementsCompleted.text = "Completed: " + achivementsNumFromDB.toString() + "/" + count.toString()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
-    private fun generateDummyList(size: Int): List<ListItem> {
-        val list = ArrayList<ListItem>()
-        var drawable = R.drawable.trophy
-        var text1 = ""
-        for (i in 0 until size) {
-            if (i % 5 == 0) {
-                text1 = "Completed a recipe with milk"
-            } else if (i % 5 == 1) {
-                text1 = "Completed an easy recipe"
-            } else if (i % 5 == 2) {
-                text1 = "Completed an intermediate recipe"
-            } else if (i % 5 == 3){
-                text1 = "Completed an hard recipe"
-            } else {
-                text1 = "Made a recipe that has eggs"
+    fun getAchievements(){
+        reference = FirebaseDatabase.getInstance().getReference("Achievements")
+        reference2 = FirebaseDatabase.getInstance().getReference("userAchievements")
+        var check: Query = reference2.orderByChild("username").equalTo(username)
+
+        reference.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    if(achievementArrayList.isEmpty()) {
+                        for (achievementSnapshot in snapshot.children) {
+                            val achievement = achievementSnapshot.getValue(Achievement::class.java)
+                            achievementArrayList.add(achievement!!)
+                        }
+                        count = achievementArrayList.size
+                    }
+                    check.addValueEventListener(object : ValueEventListener{
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if(snapshot.exists()){
+                                snapshot.child("achievementsList").children.forEach {
+                                    completedList.add(it.getValue().toString())
+                                }
+                                for(item in completedList){
+                                    for (achievement in achievementArrayList){
+                                        if(item.equals(achievement.name)){
+                                            achievement.completed = true
+                                        }
+                                    }
+                                }
+                                achievementRecyclerView.adapter = AchievementsAdapter(achievementArrayList)
+                            } else {
+                                achievementRecyclerView.adapter = AchievementsAdapter(achievementArrayList)
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            TODO("Not yet implemented")
+                        }
+
+                    })
+                }
             }
-            val item = ListItem(drawable, text1)
-            list += item
-        }
-        return list
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
     }
 }

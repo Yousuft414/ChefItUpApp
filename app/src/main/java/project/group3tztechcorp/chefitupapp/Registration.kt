@@ -14,6 +14,8 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import java.text.SimpleDateFormat
+import java.util.*
 
 class Registration : AppCompatActivity() {
 
@@ -35,6 +37,9 @@ class Registration : AppCompatActivity() {
     lateinit var mLoginBtn: TextView;
     lateinit var progressBar: ProgressBar;
     lateinit var sharedPreferences: SharedPreferences
+    lateinit var localDate: Calendar
+    lateinit var dateFormat: SimpleDateFormat
+    lateinit var date: String
 
     private final val myPreferences: String = "MyPref"
 
@@ -220,6 +225,16 @@ class Registration : AppCompatActivity() {
         var editor: SharedPreferences.Editor = sharedPreferences.edit()
         editor.putString("username", username.toString())
         editor.putString("fullName", fullName.toString())
+
+        if(sharedPreferences.getString("date", "").toString() == null) {
+            localDate = Calendar.getInstance()
+            dateFormat = SimpleDateFormat("MM/dd/yyyy")
+            date = dateFormat.format(localDate.time)
+            editor.putString("date", date)
+        } else {
+            date = sharedPreferences.getString("date", "").toString()
+        }
+
         editor.commit()
 
         //send to next activity
@@ -229,6 +244,7 @@ class Registration : AppCompatActivity() {
         intent.putExtra("email", email)
         intent.putExtra("phone", phone)
         intent.putExtra("password", password)
+        intent.putExtra("savedDate", date)
 
         startActivity(intent)
 
