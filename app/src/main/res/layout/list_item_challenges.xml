@@ -7,7 +7,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="280dp"
         app:cardCornerRadius="10dp"
         app:cardBackgroundColor="#FD0909"
         app:cardElevation="5dp">
@@ -28,7 +28,7 @@
                 android:layout_toEndOf="@id/image_view_challenges"
                 android:text="Name"
                 android:textColor="@android:color/black"
-                android:textSize="18sp"
+                android:textSize="28sp"
                 android:textStyle="bold" />
             <TextView
                 android:id="@+id/recipeDescription_challenges"
@@ -39,7 +39,37 @@
                 android:layout_below="@+id/recipeName_challenges"
                 android:text="Recipe Description"
                 android:textColor="@color/black"
-                android:textSize="10sp" />
+                android:textSize="18sp" />
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/fire1"
+                app:lottie_url="https://assets3.lottiefiles.com/packages/lf20_gkmkgw96.json"
+                android:layout_width="60dp"
+                android:layout_height="100dp"
+                app:lottie_autoPlay="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:layout_centerHorizontal="true"
+                app:lottie_loop="true"/>
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/fire2"
+                app:lottie_url="https://assets3.lottiefiles.com/packages/lf20_gkmkgw96.json"
+                android:layout_width="60dp"
+                android:layout_height="100dp"
+                app:lottie_autoPlay="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:layout_toRightOf="@+id/fire1"
+                app:lottie_loop="true"/>
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/fire3"
+                app:lottie_url="https://assets3.lottiefiles.com/packages/lf20_gkmkgw96.json"
+                android:layout_width="60dp"
+                android:layout_height="100dp"
+                app:lottie_autoPlay="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:layout_toRightOf="@+id/fire2"
+                app:lottie_loop="true"/>
             <TextView
                 android:id="@+id/recipeLevel_challenges"
                 android:layout_width="70dp"

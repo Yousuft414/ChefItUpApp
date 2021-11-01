@@ -10,6 +10,8 @@
     <color name="yellow">#FF9A00</color>
     <color name="brown">#433232</color>
     <color name="gray">#E1DFDF</color>
+    <color name="green">#15A515</color>
+    <color name="lightGreen">#06F306</color>
     <color name="hintTextColor">#B3AFAF</color>
     <color name="transparent">#00000000</color>
 </resources>

@@ -1,18 +1,20 @@
 package project.group3tztechcorp.chefitupapp.ui
 
+import android.animation.ValueAnimator
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentActivity
-import androidx.navigation.findNavController
 import com.google.firebase.database.*
 import project.group3tztechcorp.chefitupapp.*
 import project.group3tztechcorp.chefitupapp.R
 import project.group3tztechcorp.chefitupapp.databinding.FragmentProfileBinding
+import project.group3tztechcorp.chefitupapp.splash.SplashScreens
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,6 +32,9 @@ class ProfileFragment : Fragment() {
     private var param2: String? = null
     lateinit var binding: FragmentProfileBinding
     lateinit var user: UserInformation
+    private var max: Int = 0
+    private var min: Int = 0
+    private var percent: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,19 +55,32 @@ class ProfileFragment : Fragment() {
 
         binding.accountBtn.setOnClickListener { view: View ->
             //view.findNavController().navigate(R.id.action_profileFragment_to_accountInformationFragment)
-            startActivity(Intent(context, GroceryListPage::class.java))
+            val intent = Intent(context, SplashScreens::class.java)
+            intent.putExtra("fullName", "name")
+            intent.putExtra("username", "username")
+            intent.putExtra("savedDate", "date")
+            intent.putExtra("splash", 2)
+
+            startActivity(intent)
         }
-        /*
+
         binding.rewardsGainedBtn.setOnClickListener{
-            //inflater.inflate(R.layout.fragment_rewards_page, container, false)
-        }*/
+            startActivity(Intent(context, RewardsPage::class.java))
+        }
 
         binding.recipesCompletedBtn.setOnClickListener {
             startActivity(Intent(context, RecipesCompleted::class.java))
         }
 
         binding.achievementsBtn.setOnClickListener {
-            startActivity(Intent(context, Achievements::class.java))
+
+            val intent = Intent(context, SplashScreens::class.java)
+            intent.putExtra("fullName", "name")
+            intent.putExtra("username", "username")
+            intent.putExtra("savedDate", "date")
+            intent.putExtra("splash", 3)
+
+            startActivity(intent)
         }
 
 
@@ -90,7 +108,8 @@ class ProfileFragment : Fragment() {
                 }
             }
     }
-    private fun getData(){
+
+    private fun getData() {
 
         var fullname = arguments?.getString("fullName").toString().trim()
         var username = arguments?.getString("userName").toString().trim()
@@ -108,10 +127,20 @@ class ProfileFragment : Fragment() {
                     var levelFromDB = snapshot.child(username).child("level").getValue()
                     var experienceFromDB = snapshot.child(username).child("experience").getValue()
                     var rewardsNumFromDB = snapshot.child(username).child("rewards").getValue()
-                    var recipiesNumFromDB = snapshot.child(username).child("recipesCompleted").getValue()
-                    var achivementsNumFromDB = snapshot.child(username).child("achievementsCompleted").getValue()
+                    var recipiesNumFromDB =
+                        snapshot.child(username).child("recipesCompleted").getValue()
+                    var achivementsNumFromDB =
+                        snapshot.child(username).child("achievementsCompleted").getValue()
 
-                    user = UserInformation(username, fullname, levelFromDB.toString().toInt(), experienceFromDB.toString().toInt(), rewardsNumFromDB.toString().toInt(), recipiesNumFromDB.toString().toInt(), achivementsNumFromDB.toString().toInt())
+                    user = UserInformation(
+                        username,
+                        fullname,
+                        levelFromDB.toString().toInt(),
+                        experienceFromDB.toString().toInt(),
+                        rewardsNumFromDB.toString().toInt(),
+                        recipiesNumFromDB.toString().toInt(),
+                        achivementsNumFromDB.toString().toInt()
+                    )
 
                     //set the data
                     binding.userName.text = username
@@ -119,12 +148,65 @@ class ProfileFragment : Fragment() {
                     binding.rewardsNum.text = rewardsNumFromDB.toString()
                     binding.recipesCompletedNum.text = recipiesNumFromDB.toString()
                     binding.achievementsNum.text = achivementsNumFromDB.toString()
-                    binding.level.text = levelFromDB.toString()
-                    binding.experienceUser.text = "Experience: " + experienceFromDB.toString()
+                    binding.level.text = "Level: " + levelFromDB.toString()
+                    binding.experienceUser.text = "Experience: "
+
+                    if (levelFromDB.toString().toInt() == 1) {
+                        min = 0
+                        max = 300
+                        percent = experienceFromDB.toString().toInt() - min
+                        binding.experienceBar.max = max - min
+
+                        startAnimationr(0, percent)
+                    } else if (levelFromDB.toString().toInt() == 2) {
+                        min = 301
+                        max = 701
+                        percent = experienceFromDB.toString().toInt() - min
+                        binding.experienceBar.max = max - min
+
+                        startAnimationr(0, percent)
+                    } else if (levelFromDB.toString().toInt() == 3) {
+                        min = 701
+                        max = 1301
+                        percent = experienceFromDB.toString().toInt() - min
+                        binding.experienceBar.max = max - min
+
+                        startAnimationr(0, percent)
+                    } else if (levelFromDB.toString().toInt() == 4) {
+                        min = 1301
+                        max = 2101
+                        percent = experienceFromDB.toString().toInt() - min
+                        binding.experienceBar.max = max - min
+
+                        startAnimationr(0, percent)
+                    } else if (levelFromDB.toString().toInt() == 5) {
+                        min = 2101
+                        max = 2101
+                        percent = 0
+                        binding.experienceUser.text = "Max Level Reached"
+                    }
+
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {}
         })
+    }
+
+    fun startAnimationr(start: Int, end: Int) {
+        var animator: ValueAnimator = ValueAnimator.ofInt(start, end)
+        animator.startDelay = 500
+        animator.setDuration(2000)
+        animator.addUpdateListener(object : ValueAnimator.AnimatorUpdateListener {
+            override fun onAnimationUpdate(animation: ValueAnimator?) {
+                binding.experienceUserNumber.setText(
+                    animation!!.getAnimatedValue().toString() + "" + "/" + (max - min)
+                )
+                binding.experienceBar.setProgress(animation.getAnimatedValue().toString().toInt())
+            }
+
+        })
+        animator.start()
+
     }
 }

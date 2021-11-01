@@ -1,6 +1,7 @@
 package project.group3tztechcorp.chefitupapp
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -19,6 +20,7 @@ class GroceryListPage : AppCompatActivity() {
     lateinit var username: String
     private var input: String = "apple"
     lateinit var sharedPreferences: SharedPreferences
+    lateinit var editor: SharedPreferences.Editor
     private final val myPreferences: String = "MyPref"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,14 +31,17 @@ class GroceryListPage : AppCompatActivity() {
         sharedPreferences = getSharedPreferences(myPreferences, Context.MODE_PRIVATE)
         username = sharedPreferences.getString("username", "").toString()
 
+        editor = sharedPreferences.edit()
+
         groceryArrayList = arrayListOf<String>()
 
         getAllGroceries()
 
-        binding.groceryListView.onItemLongClickListener = AdapterView.OnItemLongClickListener { parent, view, position, id ->
-            removeItem(position)
-            false
-        }
+        binding.groceryListView.onItemLongClickListener =
+            AdapterView.OnItemLongClickListener { parent, view, position, id ->
+                removeItem(position)
+                false
+            }
 
         adapter = GroceryListAdapter(groceryArrayList, applicationContext)
 
@@ -44,28 +49,35 @@ class GroceryListPage : AppCompatActivity() {
 
         binding.buttonAdd.setOnClickListener {
             input = binding.groceryListItem.text.toString()
-            if(input.isEmpty()){
+            if (input.isEmpty()) {
                 Toast.makeText(this, "Please enter an item", Toast.LENGTH_SHORT).show()
             } else {
                 addItem(input)
                 binding.groceryListItem.setText("")
             }
         }
+
+        binding.backButton.setOnClickListener {
+            editor.putString("transition", (1).toString())
+            editor.commit()
+            var intent: Intent = Intent(this@GroceryListPage, UserInterface::class.java)
+            intent.putExtra("username", username)
+            startActivity(intent)
+        }
     }
 
-    fun addItem(item: String){
+    fun addItem(item: String) {
         groceryArrayList.add(item)
         adapter.notifyDataSetChanged()
 
         reference = FirebaseDatabase.getInstance().getReference("GroceryList")
-        var checkGroceryList : Query = reference.orderByChild("username").equalTo(username)
+        var checkGroceryList: Query = reference.orderByChild("username").equalTo(username)
 
-        checkGroceryList.addListenerForSingleValueEvent(object: ValueEventListener {
+        checkGroceryList.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.exists()){
+                if (snapshot.exists()) {
                     reference.child(username).child("groceryList").setValue(groceryArrayList)
-                }
-                else {
+                } else {
                     var groceryList = UserGroceryList(username, groceryArrayList)
                     reference.child(username).setValue(groceryList)
                 }
@@ -79,20 +91,19 @@ class GroceryListPage : AppCompatActivity() {
 
     }
 
-    fun removeItem(position: Int){
+    fun removeItem(position: Int) {
         groceryArrayList.removeAt(position)
         adapter.notifyDataSetChanged()
 
         reference = FirebaseDatabase.getInstance().getReference("GroceryList")
-        var checkGroceryList : Query = reference.orderByChild("username").equalTo(username)
+        var checkGroceryList: Query = reference.orderByChild("username").equalTo(username)
 
-        checkGroceryList.addListenerForSingleValueEvent(object: ValueEventListener {
+        checkGroceryList.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.exists()){
+                if (snapshot.exists()) {
                     reference.child(username).child("groceryList").setValue(groceryArrayList)
-                }
-                else {
-                    if (!groceryArrayList.isEmpty()){
+                } else {
+                    if (!groceryArrayList.isEmpty()) {
                         var groceryList = UserGroceryList(username, groceryArrayList)
                         reference.child(username).setValue(groceryList)
                     }
@@ -106,21 +117,20 @@ class GroceryListPage : AppCompatActivity() {
         })
     }
 
-    fun getAllGroceries(){
+    fun getAllGroceries() {
         reference = FirebaseDatabase.getInstance().getReference("GroceryList")
-        var checkGroceryList : Query = reference.orderByChild("username").equalTo(username)
+        var checkGroceryList: Query = reference.orderByChild("username").equalTo(username)
 
-        checkGroceryList.addListenerForSingleValueEvent(object: ValueEventListener {
+        checkGroceryList.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.exists()){
+                if (snapshot.exists()) {
                     snapshot.child(username).child("groceryList").children.forEach {
                         groceryArrayList!!.add(it.getValue().toString())
                     }
                     adapter = GroceryListAdapter(groceryArrayList!!, applicationContext)
                     binding.groceryListView.adapter = adapter
-                }
-                else {
-                    if (!groceryArrayList.isEmpty()){
+                } else {
+                    if (!groceryArrayList.isEmpty()) {
                         var groceryList = UserGroceryList(username, groceryArrayList)
                         reference.child(username).setValue(groceryList)
                     }

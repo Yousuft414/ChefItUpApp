@@ -14,12 +14,14 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp">
+            android:layout_height="200dp"
+            android:background="@color/gray">
 
             <ImageView
                 android:id="@+id/single_recipe_Image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:scaleType="centerCrop"
                 android:src="@drawable/loginbackground" />
 
             <ImageView
@@ -35,6 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
+                android:backgroundTint="@color/yellow"
                 android:layout_alignParentRight="true"
                 android:text="Start" />
 
@@ -52,7 +55,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_height="160dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:paddingTop="5dp">
@@ -81,7 +84,7 @@
                 android:layout_below="@+id/single_recipe_category"/>
             <TextView
                 android:id="@+id/single_recipe_cookTime"
-                android:layout_width="70dp"
+                android:layout_width="wrap_content"
                 android:padding="3dp"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/cook_time_image"
@@ -98,7 +101,7 @@
                 android:layout_below="@+id/single_recipe_category"/>
             <TextView
                 android:id="@+id/single_recipe_prepTime"
-                android:layout_width="70dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="3dp"
                 android:text="Prep Time"
@@ -116,7 +119,7 @@
 
             <TextView
                 android:id="@+id/single_recipe_serving"
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/single_recipe_category"
                 android:layout_toRightOf="@+id/serving_image"
@@ -134,6 +137,35 @@
                 android:lines="3"
                 android:layout_below="@id/single_recipe_cookTime"/>
 
+            <RelativeLayout
+                android:layout_below="@+id/single_recipe_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+
+                <Button
+                    android:id="@+id/ingredientsButton"
+                    android:textSize="12sp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:background="#00000000"
+                    android:elevation="0dp"
+                    android:gravity="left"
+                    android:text="Ingredients"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/directionsButton"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="34dp"
+                    android:layout_toRightOf="@+id/ingredientsButton"
+                    android:background="#00000000"
+                    android:text="Directions"
+                    android:textColor="@color/gray"
+                    android:textSize="12sp" />
+            </RelativeLayout>
         </RelativeLayout>
 
         <LinearLayout
@@ -145,7 +177,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="@color/yellow"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="10dp"
                 android:layout_margin="10dp">
 
@@ -161,6 +194,7 @@
                         android:layout_marginTop="5dp"
                         android:textSize="20sp"
                         android:includeFontPadding="false"
+                        android:textColor="@color/black"
                         android:fontFamily="serif"
                         android:textStyle="bold"
                         android:layout_centerHorizontal="true"
@@ -172,45 +206,14 @@
                         android:layout_height="wrap_content"
                         android:padding="3dp"
                         android:layout_alignParentLeft="true"/>
-
-                </RelativeLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/achievements_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                app:cardBackgroundColor="@color/white"
-                app:cardElevation="10dp"
-                android:layout_margin="10dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:id="@+id/single_recipe_directions"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Directions"
-                        android:layout_marginTop="5dp"
-                        android:textSize="20sp"
-                        android:includeFontPadding="false"
-                        android:fontFamily="serif"
-                        android:textStyle="bold"
-                        android:layout_centerHorizontal="true"
-                        android:padding="5dp"/>
                     <ListView
                         android:id="@+id/single_recipe_directionList"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/single_recipe_directions"
+                        android:layout_below="@+id/single_recipe_ingredients"
                         android:padding="3dp"
-                        android:layout_alignParentLeft="true" />
-
+                        android:layout_alignParentLeft="true"
+                        android:visibility="invisible"/>
 
                 </RelativeLayout>
 

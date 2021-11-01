@@ -1,6 +1,7 @@
 package project.group3tztechcorp.chefitupapp
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -25,6 +26,7 @@ class RecipesCompleted : AppCompatActivity() {
     lateinit var binding: ActivityRecipesCompletedBinding
     private var username: String = "user"
     lateinit var sharedPreferences: SharedPreferences
+    lateinit var editor: SharedPreferences.Editor
 
     private final val myPreferences: String = "MyPref"
 
@@ -37,6 +39,8 @@ class RecipesCompleted : AppCompatActivity() {
         sharedPreferences = getSharedPreferences(myPreferences, Context.MODE_PRIVATE)
         username = sharedPreferences.getString("username", "").toString()
 
+        editor = sharedPreferences.edit()
+
         recipeRecyclerView = binding.recycleViewCompletedRecipes
         recipeRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recipeRecyclerView.setHasFixedSize(true)
@@ -45,6 +49,14 @@ class RecipesCompleted : AppCompatActivity() {
         Log.i(TAG, "hello" + username)
 
         getAllRecipies()
+
+        binding.backButton.setOnClickListener {
+            editor.putString("transition", (1).toString())
+            editor.commit()
+            var intent: Intent = Intent(this@RecipesCompleted, UserInterface::class.java)
+            intent.putExtra("username", username)
+            startActivity(intent)
+        }
 
     }
 

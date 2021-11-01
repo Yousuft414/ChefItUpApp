@@ -1,5 +1,7 @@
 package project.group3tztechcorp.chefitupapp
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -17,6 +19,9 @@ class UserInterface : AppCompatActivity() {
     private var recipeHomeFragment: RecipeHomeFragment = RecipeHomeFragment()
     private var rewardsPageFragment: RewardsPageFragment = RewardsPageFragment()
     private var challengesPageFragment: ChallengesPageFragment = ChallengesPageFragment()
+    lateinit var sharedPreferences: SharedPreferences
+    private final val myPreferences: String = "MyPref"
+    private var transition: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +31,9 @@ class UserInterface : AppCompatActivity() {
         var fullName = intent.getStringExtra("fullName").toString().trim()
         var username = intent.getStringExtra("username").toString().trim()
         var date = intent.getStringExtra("savedDate").toString().trim()
+
+        sharedPreferences = getSharedPreferences(myPreferences, Context.MODE_PRIVATE)
+        transition = sharedPreferences.getString("transition", "0").toString().toInt()
 
         var bundle = Bundle()
         bundle.putString("fullName", fullName)
@@ -38,7 +46,16 @@ class UserInterface : AppCompatActivity() {
         challengesPageFragment.arguments = bundle
 
         bottomNav = findViewById(R.id.bottomNav)
-        replaceFragment(profileFragment)
+
+        if(transition == 1) {
+            replaceFragment(profileFragment)
+        } else if(transition == 2) {
+            replaceFragment(recipeHomeFragment)
+        } else if(transition == 3) {
+            replaceFragment(challengesPageFragment)
+        } else if(transition == 4) {
+            replaceFragment(rewardsPageFragment)
+        }
 
         bottomNav.setOnItemSelectedListener {
             //var selectedFragment : Fragment = null

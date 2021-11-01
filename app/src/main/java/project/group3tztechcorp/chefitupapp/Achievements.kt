@@ -1,6 +1,7 @@
 package project.group3tztechcorp.chefitupapp
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -23,6 +24,7 @@ class Achievements : AppCompatActivity() {
     private var username: String = "user"
     private var count: Int = 0
     lateinit var sharedPreferences: SharedPreferences
+    lateinit var editor: SharedPreferences.Editor
 
     private final val myPreferences: String = "MyPref"
 
@@ -35,6 +37,8 @@ class Achievements : AppCompatActivity() {
 
         sharedPreferences = getSharedPreferences(myPreferences, Context.MODE_PRIVATE)
         username = sharedPreferences.getString("username", "").toString()
+
+        editor = sharedPreferences.edit()
 
         var reference3: DatabaseReference =
             FirebaseDatabase.getInstance().getReference("userInformation")
@@ -60,6 +64,14 @@ class Achievements : AppCompatActivity() {
 
             override fun onCancelled(error: DatabaseError) {}
         })
+
+        binding.backButton.setOnClickListener {
+            editor.putString("transition", (1).toString())
+            editor.commit()
+            var intent: Intent = Intent(this@Achievements, UserInterface::class.java)
+            intent.putExtra("username", username)
+            startActivity(intent)
+        }
     }
 
     fun getAchievements(){

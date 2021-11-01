@@ -19,9 +19,18 @@
                 android:layout_height="wrap_content"
                 android:text="Ingredients"
                 android:layout_centerInParent="true"
+                android:textStyle="bold"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="@color/black" />
+
+            <ImageView
+                android:id="@+id/backButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/ic_baseline_back" />
 
             <Button
                 android:id="@+id/nextButton"
@@ -42,8 +51,9 @@
                 android:id="@+id/recipes_completed_btn"
                 android:layout_width="275dp"
                 android:layout_height="match_parent"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="@color/yellow"
                 app:cardElevation="10dp"
+                app:cardCornerRadius="10dp"
                 android:layout_margin="10dp">
 
                 <RelativeLayout

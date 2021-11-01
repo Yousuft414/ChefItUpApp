@@ -166,15 +166,15 @@ class Registration : AppCompatActivity() {
     private fun validatePassword(): Boolean {
         var password = mPasswordText.text.toString()
         var passwordVal = "^(?!.* )(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&+=]).{8,15}$"
-                /*"^" +
-                //"(?=.*[0-9])" +             //at least 1 digit
-                //"(?=.*[a-z])" +             //at least 1 lower case letter
-                //"(?=.*[A-Z])" +             //at least 1 upper case letter
-                "(?!.* )" +                   //no white space
-                "(?=.*[a-zA-Z])" +            //any letter
-                "(?=.*[@#$%^&+=])" +          //at least 1 special character
-                ".{8,}" +                     //at least 8 characters
-                "$"*/
+        /*"^" +
+        //"(?=.*[0-9])" +             //at least 1 digit
+        //"(?=.*[a-z])" +             //at least 1 lower case letter
+        //"(?=.*[A-Z])" +             //at least 1 upper case letter
+        "(?!.* )" +                   //no white space
+        "(?=.*[a-zA-Z])" +            //any letter
+        "(?=.*[@#$%^&+=])" +          //at least 1 special character
+        ".{8,}" +                     //at least 8 characters
+        "$"*/
 
         return if (password.isEmpty()) {
             mPassword.error = "Field cannot be empty"
@@ -226,7 +226,7 @@ class Registration : AppCompatActivity() {
         editor.putString("username", username.toString())
         editor.putString("fullName", fullName.toString())
 
-        if(sharedPreferences.getString("date", "").toString() == null) {
+        if (sharedPreferences.getString("date", "").toString() == null) {
             localDate = Calendar.getInstance()
             dateFormat = SimpleDateFormat("MM/dd/yyyy")
             date = dateFormat.format(localDate.time)
@@ -245,6 +245,7 @@ class Registration : AppCompatActivity() {
         intent.putExtra("phone", phone)
         intent.putExtra("password", password)
         intent.putExtra("savedDate", date)
+        intent.putExtra("splash", 8)
 
         startActivity(intent)
 

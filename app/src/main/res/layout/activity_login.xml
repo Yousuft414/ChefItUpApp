@@ -41,7 +41,7 @@
             android:id="@+id/editTextUsernameEmail"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:hint="Username/Email"
+            android:hint="Username"
             android:transitionName="username_tran"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 

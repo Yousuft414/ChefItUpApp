@@ -1,14 +1,21 @@
 package project.group3tztechcorp.chefitupapp.ui
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.*
 import org.json.JSONObject
 import project.group3tztechcorp.chefitupapp.R
+import project.group3tztechcorp.chefitupapp.Reward
+import project.group3tztechcorp.chefitupapp.adapter.RewardsAdapter
 import project.group3tztechcorp.chefitupapp.databinding.FragmentRewardsPageBinding
 import java.io.BufferedReader
 import java.io.DataOutputStream
@@ -33,9 +40,16 @@ class RewardsPageFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var reference: DatabaseReference
+    private lateinit var reference2: DatabaseReference
+    private lateinit var rewardRecyclerView: RecyclerView
+    private lateinit var rewardsArrayList: ArrayList<Reward>
     lateinit var binding: FragmentRewardsPageBinding
     private var params: JSONObject? = null
     private var resultFinal:String? = null
+    private var max: Int = 0
+    private var min: Int = 0
+    private var percent: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +67,15 @@ class RewardsPageFragment : Fragment() {
         //return inflater.inflate(R.layout.fragment_rewards_page, container, false)
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_rewards_page, container, false)
+
+        rewardsArrayList = arrayListOf<Reward>()
+
+        rewardRecyclerView = binding.rewardsRecycler
+        rewardRecyclerView.layoutManager = LinearLayoutManager(container?.context, LinearLayoutManager.HORIZONTAL, false)
+        rewardRecyclerView.setHasFixedSize(true)
+
+        getProgress()
+        getRewards()
 
         binding.button.setOnClickListener {
 
@@ -118,6 +141,84 @@ class RewardsPageFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    fun getProgress(){
+        var fullname = arguments?.getString("fullName").toString().trim()
+        var username = arguments?.getString("userName").toString().trim()
+
+        var reference2: DatabaseReference =
+            FirebaseDatabase.getInstance().getReference("userInformation")
+
+        var checkUser: Query = reference2.orderByChild("username").equalTo(username)
+
+        checkUser.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    //get data from database
+                    var levelFromDB = snapshot.child(username).child("level").getValue()
+                    var experienceFromDB = snapshot.child(username).child("experience").getValue()
+
+                    if (levelFromDB.toString().toInt() == 1) {
+                        min = 0
+                        max = 300
+                        percent = experienceFromDB.toString().toInt() - min
+                        binding.experienceBar.max = max - min
+
+                        binding.experienceBar.progress = percent
+                    } else if (levelFromDB.toString().toInt() == 2) {
+                        min = 301
+                        max = 701
+                        percent = experienceFromDB.toString().toInt() - min
+                        binding.experienceBar.max = max - min
+
+                        binding.experienceBar.progress = percent
+                    } else if (levelFromDB.toString().toInt() == 3) {
+                        min = 701
+                        max = 1301
+                        percent = experienceFromDB.toString().toInt() - min
+                        binding.experienceBar.max = max - min
+
+                        binding.experienceBar.progress = percent
+                    } else if (levelFromDB.toString().toInt() == 4) {
+                        min = 1301
+                        max = 2101
+                        percent = experienceFromDB.toString().toInt() - min
+                        binding.experienceBar.max = max - min
+
+                        binding.experienceBar.progress = percent
+                    } else if (levelFromDB.toString().toInt() == 5) {
+                        min = 2101
+                        max = 2101
+                        percent = 0
+                        binding.experienceBar.progress = percent
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
+    fun getRewards(){
+        reference = FirebaseDatabase.getInstance().getReference("Rewards")
+
+        reference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()){
+                    for(rewardSnapshot in snapshot.children){
+                        val reward = rewardSnapshot.getValue(Reward::class.java)
+                        rewardsArrayList.add(reward!!)
+                    }
+                    rewardRecyclerView.adapter = RewardsAdapter(rewardsArrayList)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 
     @Throws(java.lang.Exception::class)

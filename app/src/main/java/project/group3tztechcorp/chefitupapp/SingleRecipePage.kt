@@ -7,12 +7,14 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.*
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import project.group3tztechcorp.chefitupapp.databinding.ActivitySingleRecipePageBinding
 import project.group3tztechcorp.chefitupapp.recipeUI.RecipeIngredients
+import project.group3tztechcorp.chefitupapp.splash.SplashScreens
 
 class SingleRecipePage : AppCompatActivity() {
 
@@ -24,6 +26,7 @@ class SingleRecipePage : AppCompatActivity() {
     private var directionsList: ArrayList<String> = ArrayList()
     lateinit var menu: MenuItem
     lateinit var sharedPreferences: SharedPreferences
+    lateinit var editor: SharedPreferences.Editor
     private var username: String = "user"
     private var fullName: String = "user"
 
@@ -46,6 +49,7 @@ class SingleRecipePage : AppCompatActivity() {
         }
 
         sharedPreferences = getSharedPreferences(myPreferences, Context.MODE_PRIVATE)
+        editor = sharedPreferences.edit()
         username = sharedPreferences.getString("username", "").toString()
         fullName = sharedPreferences.getString("fullName", "").toString()
 
@@ -92,6 +96,13 @@ class SingleRecipePage : AppCompatActivity() {
         })
 
         binding.backButton.setOnClickListener {
+            if (check == 1){
+                editor.putString("transition", (3).toString())
+                editor.commit()
+            } else {
+                editor.putString("transition", (2).toString())
+                editor.commit()
+            }
             var intent: Intent = Intent(this@SingleRecipePage, UserInterface::class.java)
             intent.putExtra("username", username)
             intent.putExtra("fullName", fullName)
@@ -99,10 +110,27 @@ class SingleRecipePage : AppCompatActivity() {
         }
 
         binding.startButton.setOnClickListener {
-            var intent: Intent = Intent(this@SingleRecipePage, RecipeIngredients::class.java)
+            var intent: Intent = Intent(this@SingleRecipePage, SplashScreens::class.java)
             intent.putExtra("recipe", name)
             intent.putExtra("Check", check)
+            intent.putExtra("splash", 4)
             startActivity(intent)
+        }
+
+        binding.ingredientsButton.setOnClickListener {
+            binding.singleRecipeIngredients.text = "Ingredients"
+            binding.singleRecipeDirectionList.visibility = View.INVISIBLE
+            binding.singleRecipeIngredientList.visibility = View.VISIBLE
+            binding.directionsButton.setTextColor(getColor(R.color.gray))
+            binding.ingredientsButton.setTextColor(getColor(R.color.black))
+        }
+
+        binding.directionsButton.setOnClickListener {
+            binding.singleRecipeIngredients.text = "Directions"
+            binding.singleRecipeDirectionList.visibility = View.VISIBLE
+            binding.singleRecipeIngredientList.visibility = View.INVISIBLE
+            binding.directionsButton.setTextColor(getColor(R.color.black))
+            binding.ingredientsButton.setTextColor(getColor(R.color.gray))
         }
     }
 }

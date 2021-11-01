@@ -16,13 +16,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
-import project.group3tztechcorp.chefitupapp.Direction
-import project.group3tztechcorp.chefitupapp.Ingredient
+import project.group3tztechcorp.chefitupapp.*
 import project.group3tztechcorp.chefitupapp.R
-import project.group3tztechcorp.chefitupapp.UserGroceryList
 import project.group3tztechcorp.chefitupapp.adapter.IngredientAdapter
 import project.group3tztechcorp.chefitupapp.databinding.ActivityRecipeIngredientsBinding
 import project.group3tztechcorp.chefitupapp.databinding.ActivitySingleRecipePageBinding
+import project.group3tztechcorp.chefitupapp.splash.SplashScreens
 
 private const val TAG = "MyActivity"
 
@@ -65,10 +64,32 @@ class RecipeIngredients : AppCompatActivity() {
 
         getAllIngredients()
 
+        binding.backButton.setOnClickListener {
+            var intent: Intent = Intent(this@RecipeIngredients, SingleRecipePage::class.java)
+            intent.putExtra("username", username)
+            intent.putExtra("Name", name)
+            intent.putExtra("Check", check)
+            startActivity(intent)
+        }
+
         binding.recipeIngredientList.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val ingredients: Ingredient = ingredientArrayList!![position] as Ingredient
             ingredients.selected = !ingredients.selected
             adapter.notifyDataSetChanged()
+            for(i in 0 until adapter.count) {
+                var ingredient: Ingredient = adapter.getItem(i)
+                if (!ingredient.selected) {
+                    checked = false
+                    break
+                } else {
+                    checked = true
+                }
+            }
+            if(checked){
+                binding.nextButton.setBackgroundColor(getColor(R.color.yellow))
+            } else {
+                binding.nextButton.setBackgroundColor(getColor(R.color.gray))
+            }
         }
 
         binding.nextButton.setOnClickListener {
@@ -82,10 +103,19 @@ class RecipeIngredients : AppCompatActivity() {
                 }
             }
             if(checked) {
-                var intent: Intent = Intent(this@RecipeIngredients, RecipeDirections::class.java)
-                intent.putExtra("recipe", name)
-                intent.putExtra("Check", check)
-                startActivity(intent)
+                if (check == 0) {
+                    var intent: Intent = Intent(this@RecipeIngredients, SplashScreens::class.java)
+                    intent.putExtra("recipe", name)
+                    intent.putExtra("Check", check)
+                    intent.putExtra("splash", 5)
+                    startActivity(intent)
+                } else {
+                    var intent: Intent = Intent(this@RecipeIngredients, SplashScreens::class.java)
+                    intent.putExtra("recipe", name)
+                    intent.putExtra("Check", check)
+                    intent.putExtra("splash", 6)
+                    startActivity(intent)
+                }
             } else {
                 Toast.makeText(this,"You have not checked off all the ingredients", Toast.LENGTH_SHORT).show()
             }
@@ -97,6 +127,7 @@ class RecipeIngredients : AppCompatActivity() {
                 ingredient.selected = true
             }
             adapter.notifyDataSetChanged()
+            binding.nextButton.setBackgroundColor(getColor(R.color.yellow))
         }
 
         binding.checkNone.setOnClickListener {
@@ -105,6 +136,7 @@ class RecipeIngredients : AppCompatActivity() {
                 ingredient.selected = false
             }
             adapter.notifyDataSetChanged()
+            binding.nextButton.setBackgroundColor(getColor(R.color.gray))
         }
 
         binding.sendToList.setOnClickListener {

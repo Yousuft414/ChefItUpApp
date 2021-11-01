@@ -3,12 +3,14 @@ package project.group3tztechcorp.chefitupapp.ui
 import android.content.Context
 import android.content.QuickViewConstants
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -44,6 +46,7 @@ class ChallengesPageFragment : Fragment() {
     private lateinit var reference: DatabaseReference
     private lateinit var reference2: DatabaseReference
     private lateinit var reference3: DatabaseReference
+    private lateinit var reference4: DatabaseReference
     private lateinit var recipeRecyclerView: RecyclerView
     private lateinit var recipeArrayList: ArrayList<Recipe>
     lateinit var binding: FragmentChallengesPageBinding
@@ -54,6 +57,9 @@ class ChallengesPageFragment : Fragment() {
     lateinit var sharedPreferences: SharedPreferences
     lateinit var editor: SharedPreferences.Editor
     lateinit var date: String
+    private var max: Int = 0
+    private var min: Int = 0
+    private var percent: Int = 0
 
     private final val myPreferences: String = "MyPref"
 
@@ -88,6 +94,8 @@ class ChallengesPageFragment : Fragment() {
         recipeArrayList = arrayListOf<Recipe>()
         challengesList = arrayListOf<Recipe>()
         userChallengesList = arrayListOf<String>()
+
+        getProgress()
 
         getChallengesRecipies()
 
@@ -364,6 +372,63 @@ class ChallengesPageFragment : Fragment() {
 
                         })
 
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
+    fun getProgress(){
+        var fullname = arguments?.getString("fullName").toString().trim()
+        var username = arguments?.getString("userName").toString().trim()
+
+        var reference4: DatabaseReference =
+            FirebaseDatabase.getInstance().getReference("userInformation")
+
+        var checkUser: Query = reference4.orderByChild("username").equalTo(username)
+
+        checkUser.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    //get data from database
+                    var levelFromDB = snapshot.child(username).child("level").getValue()
+                    var experienceFromDB = snapshot.child(username).child("experience").getValue()
+
+                    if (levelFromDB.toString().toInt() == 1) {
+                        min = 0
+                        max = 300
+                        percent = experienceFromDB.toString().toInt() - min
+                        binding.experienceBar.max = max - min
+
+                        binding.experienceBar.progress = percent
+                    } else if (levelFromDB.toString().toInt() == 2) {
+                        min = 301
+                        max = 701
+                        percent = experienceFromDB.toString().toInt() - min
+                        binding.experienceBar.max = max - min
+
+                        binding.experienceBar.progress = percent
+                    } else if (levelFromDB.toString().toInt() == 3) {
+                        min = 701
+                        max = 1301
+                        percent = experienceFromDB.toString().toInt() - min
+                        binding.experienceBar.max = max - min
+
+                        binding.experienceBar.progress = percent
+                    } else if (levelFromDB.toString().toInt() == 4) {
+                        min = 1301
+                        max = 2101
+                        percent = experienceFromDB.toString().toInt() - min
+                        binding.experienceBar.max = max - min
+
+                        binding.experienceBar.progress = percent
+                    } else if (levelFromDB.toString().toInt() == 5) {
+                        min = 2101
+                        max = 2101
+                        percent = 0
+                        binding.experienceBar.progress = percent
                     }
                 }
             }

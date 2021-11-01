@@ -8,6 +8,7 @@
         android:id="@+id/groceryNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_marginBottom="2sp"
         android:textColor="@color/black"
         android:textStyle="bold"/>

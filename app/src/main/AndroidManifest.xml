@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChefItUpApp">
         <activity
+            android:name=".RewardsPage"
+            android:exported="true" />
+        <activity
+            android:name=".splash.SplashScreens"
+            android:exported="true" />
+        <activity
             android:name=".GroceryListPage"
             android:exported="true" />
         <activity
