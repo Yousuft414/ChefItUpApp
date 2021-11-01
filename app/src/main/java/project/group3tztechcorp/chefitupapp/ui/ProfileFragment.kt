@@ -144,7 +144,7 @@ class ProfileFragment : Fragment() {
 
                     //set the data
                     binding.userName.text = username
-                    binding.fullName.text = fullname
+                    binding.fullName.text = nameFromDB.toString()
                     binding.rewardsNum.text = rewardsNumFromDB.toString()
                     binding.recipesCompletedNum.text = recipiesNumFromDB.toString()
                     binding.achievementsNum.text = achivementsNumFromDB.toString()

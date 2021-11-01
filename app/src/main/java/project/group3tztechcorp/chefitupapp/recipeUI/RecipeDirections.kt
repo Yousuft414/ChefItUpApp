@@ -10,6 +10,7 @@ import android.os.CountDownTimer
 import android.util.Log
 import android.widget.AdapterView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
@@ -330,11 +331,25 @@ class RecipeDirections : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                Toast.makeText(
-                    applicationContext,
-                    "You should be done or almost done!",
-                    Toast.LENGTH_LONG
-                ).show()
+                if(check == 1){
+                    AlertDialog.Builder(this@RecipeDirections)
+                        .setTitle("Times Up!")
+                        .setMessage("You have run out of time! Better luck next time.")
+                        .setPositiveButton("Ok") { dialogInterface, i ->
+                            editor.putString("transition", (1).toString())
+                            editor.commit()
+                            var intent: Intent = Intent(this@RecipeDirections, UserInterface::class.java)
+                            intent.putExtra("username", username)
+                            startActivity(intent)
+                        }
+                        .show()
+                } else {
+                    Toast.makeText(
+                        applicationContext,
+                        "You should be done or almost done!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
         }.start()
 
