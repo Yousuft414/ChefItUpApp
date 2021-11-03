@@ -1,5 +1,6 @@
 package project.group3tztechcorp.chefitupapp.ui
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,8 @@ import com.google.firebase.database.*
 import org.json.JSONObject
 import project.group3tztechcorp.chefitupapp.R
 import project.group3tztechcorp.chefitupapp.Reward
+import project.group3tztechcorp.chefitupapp.RewardsPage
+import project.group3tztechcorp.chefitupapp.ScannerActivity
 import project.group3tztechcorp.chefitupapp.adapter.RewardsAdapter
 import project.group3tztechcorp.chefitupapp.databinding.FragmentRewardsPageBinding
 import java.io.BufferedReader
@@ -79,6 +82,7 @@ class RewardsPageFragment : Fragment() {
 
         binding.button.setOnClickListener {
 
+            /*
             val url = URL("https://api.ocr.space/parse/image")
             val con = url.openConnection() as HttpsURLConnection
             Log.d("myTag", "part1");
@@ -138,6 +142,9 @@ class RewardsPageFragment : Fragment() {
             }
             resultFinal=result.toString()
             print(resultFinal)
+
+             */
+            startActivity(Intent(context, ScannerActivity::class.java))
         }
 
         return binding.root
