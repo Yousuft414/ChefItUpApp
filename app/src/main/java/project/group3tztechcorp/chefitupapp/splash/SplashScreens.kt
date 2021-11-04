@@ -14,16 +14,14 @@ import android.widget.TextView
 import android.widget.Toast
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable
-import project.group3tztechcorp.chefitupapp.Achievements
-import project.group3tztechcorp.chefitupapp.GroceryListPage
-import project.group3tztechcorp.chefitupapp.R
-import project.group3tztechcorp.chefitupapp.UserInterface
+import project.group3tztechcorp.chefitupapp.*
 import project.group3tztechcorp.chefitupapp.recipeUI.RecipeDirections
 import project.group3tztechcorp.chefitupapp.recipeUI.RecipeIngredients
 
 class SplashScreens : AppCompatActivity() {
 
     lateinit var splash: LottieAnimationView
+    lateinit var splash2: LottieAnimationView
     lateinit var title: TextView
     lateinit var title2: TextView
     lateinit var title3: TextView
@@ -50,6 +48,7 @@ class SplashScreens : AppCompatActivity() {
         title2 = findViewById(R.id.SplashTitle2)
         title3 = findViewById(R.id.SplashTitle3)
         splash = findViewById(R.id.SplashScreen)
+        splash2 = findViewById(R.id.SplashScreen2)
         backdrop = findViewById(R.id.backgroundOfLottie)
 
         when (splashNumber) {
@@ -228,6 +227,24 @@ class SplashScreens : AppCompatActivity() {
                     }
                 },6000)
             }
+            9 -> {
+                //Scanner Splash
+                timer = 5500
+                startTimerOther()
+                splash.setAnimationFromUrl("https://assets2.lottiefiles.com/private_files/lf30_4kmk2efh.json")
+
+                splash.animate().translationY((1500).toFloat()).setDuration(1000).setStartDelay(4000)
+
+                title.text = "Scanning Receipt..."
+                title.animate().translationY((-2500).toFloat()).setDuration(1000).setStartDelay(4000)
+
+                Handler(Looper.getMainLooper()).postDelayed(object : Runnable {
+                    override fun run() {
+                        val intents = Intent(this@SplashScreens, RewardsPage::class.java)
+                        startActivity(intents)
+                    }
+                },9000)
+            }
         }
 
     }
@@ -287,6 +304,40 @@ class SplashScreens : AppCompatActivity() {
 
             override fun onFinish() {
 
+            }
+        }.start()
+
+        timerRunning = true
+    }
+
+    fun startTimerOther() {
+        countDownTimer = object : CountDownTimer(timer, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                timer = millisUntilFinished
+                updateTimer()
+            }
+
+            override fun onFinish() {
+                startTimer2Other()
+            }
+        }.start()
+
+        timerRunning = true
+    }
+
+    fun startTimer2Other() {
+        timer = 4000
+        splash2.setAnimationFromUrl("https://assets7.lottiefiles.com/packages/lf20_LJ6eMa.json")
+        title2.text = "YOU GOT A REWARD"
+        title2.animate().translationY((-2500).toFloat()).setDuration(1000).setStartDelay(4000)
+        splash2.animate().translationY((1500).toFloat()).setDuration(1000).setStartDelay(4000)
+        countDownTimer2 = object : CountDownTimer(timer, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                timer = millisUntilFinished
+                updateTimer()
+            }
+
+            override fun onFinish() {
             }
         }.start()
 

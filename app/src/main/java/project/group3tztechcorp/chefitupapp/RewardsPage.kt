@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +24,8 @@ class RewardsPage : AppCompatActivity() {
     lateinit var fullName: String
     lateinit var sharedPreferences: SharedPreferences
     lateinit var editor: SharedPreferences.Editor
+    private var reward: String = "none"
+    private var maxReached: Boolean = false
 
     private final val myPreferences: String = "MyPref"
 
@@ -52,6 +55,20 @@ class RewardsPage : AppCompatActivity() {
             var intent: Intent = Intent(this@RewardsPage, UserInterface::class.java)
             intent.putExtra("username", username)
             startActivity(intent)
+        }
+
+        binding.rewardPresent.setOnClickListener{
+            if(maxReached){
+                rewardsArrayList.shuffle()
+                reward = rewardsArrayList[0].name.toString()
+
+                var intent: Intent = Intent(this@RewardsPage, RedeemReward::class.java)
+                intent.putExtra("reward", reward)
+                startActivity(intent)
+
+            }else{
+                Toast.makeText(this, "You need 3 reward points to get a reward.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -88,6 +105,9 @@ class RewardsPage : AppCompatActivity() {
                         snapshot.child(username).child("rewards").getValue()
 
                     binding.rewardsNumber.text = rewardsNumFromDB.toString() + "/3"
+                    if(rewardsNumFromDB.toString().toInt() == 3){
+                        maxReached = true
+                    }
                 }
             }
 

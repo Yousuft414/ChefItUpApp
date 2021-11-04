@@ -7,80 +7,83 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ChefItUpApp">
         <activity
+            android:name=".RedeemReward"
+            android:exported="true" />
+        <activity
             android:name=".ScannerActivity"
-            android:exported="true"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".RewardsPage"
-            android:exported="true"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".splash.SplashScreens"
-            android:exported="true"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".GroceryListPage"
-            android:exported="true"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".recipeUI.RecipeDirections"
-            android:exported="true"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".recipeUI.RecipeIngredients"
-            android:exported="true"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".RecipesCompleted"
-            android:exported="true"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".GroceryList"
-            android:exported="true"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SingleRecipePage"
-            android:exported="true"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Achievements"
-            android:exported="true"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".UserInterface"
-            android:exported="true"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Login"
-            android:exported="true"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Registration"
-            android:exported="true"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"
             android:configChanges="orientation"
+            android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

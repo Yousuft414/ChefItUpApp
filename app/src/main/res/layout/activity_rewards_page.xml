@@ -93,6 +93,7 @@
                     android:layout_below="@+id/userReward">
 
                     <ImageView
+                        android:id="@+id/rewardPresent"
                         android:layout_width="200dp"
                         android:layout_height="200dp"
                         android:layout_centerHorizontal="true"
