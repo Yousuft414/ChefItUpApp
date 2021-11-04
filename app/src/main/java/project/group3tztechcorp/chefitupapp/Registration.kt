@@ -14,6 +14,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import project.group3tztechcorp.chefitupapp.splash.SplashScreens
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -238,7 +239,7 @@ class Registration : AppCompatActivity() {
         editor.commit()
 
         //send to next activity
-        val intent = Intent(this@Registration, UserInterface::class.java)
+        val intent = Intent(this@Registration, SplashScreens::class.java)
         intent.putExtra("fullName", fullName)
         intent.putExtra("username", username)
         intent.putExtra("email", email)

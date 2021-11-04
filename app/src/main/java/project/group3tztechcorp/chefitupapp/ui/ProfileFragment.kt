@@ -151,6 +151,11 @@ class ProfileFragment : Fragment() {
                     binding.level.text = "Level: " + levelFromDB.toString()
                     binding.experienceUser.text = "Experience: "
 
+                    if(rewardsNumFromDB.toString().toInt() == 3){
+                        binding.rewardsNum.setTextColor(resources.getColor(R.color.gold))
+                        binding.rewardsDesc.setTextColor(resources.getColor(R.color.gold))
+                    }
+
                     if (levelFromDB.toString().toInt() == 1) {
                         min = 0
                         max = 300
